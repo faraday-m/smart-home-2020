@@ -12,10 +12,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class Application {
-    private static SmartHome smartHome;
     private static HomeLoader homeLoader;
-    public static String ACTIVATION_CODE = "code";
-    public static String INVALID_CODE = "invalid";
+    public static String ACTIVATION_CODE_1 = "code1";
+    public static String ACTIVATION_CODE_2 = "code2";
 
     public Application(HomeLoader homeLoader) {
         this.homeLoader = homeLoader;
@@ -31,7 +30,7 @@ public class Application {
         // считываем состояние дома из файла
         try {
             SmartHome smartHome = homeLoader.load(new FileInputStream("smart-home-1.js"));
-            smartHome.addHomeComponent(HomeElementType.ALARM, new AlarmSystem(new StringId("ALARM"), ACTIVATION_CODE, AlarmState.DEACTIVATED));
+            smartHome.addHomeComponent(HomeElementType.ALARM, new AlarmSystem(new StringId("ALARM")));
             Engine engine = new SmartHomeEngine(smartHome);
             engine.start();
 

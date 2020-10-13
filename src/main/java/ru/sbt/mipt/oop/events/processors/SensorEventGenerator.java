@@ -34,19 +34,19 @@ public class SensorEventGenerator implements EventGenerator {
         if (Math.random() < 0.1) {
             sensorEventType = AlarmEventType.ALARM_ACTIVATE;
             objectId = "ALARM";
-            return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE);
+            return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_1);
         } else if (Math.random() < 0.1) {
             sensorEventType = AlarmEventType.ALARM_DEACTIVATE;
             objectId = "ALARM";
-            return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE);
+            return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_1);
         } else if (Math.random() < 0.1) {
             sensorEventType = AlarmEventType.ALARM_ACTIVATE;
             objectId = "ALARM";
-            return new AlarmEvent(sensorEventType, new StringId(objectId), Application.INVALID_CODE);
+            return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_2);
         } else if (Math.random() < 0.1) {
             sensorEventType = AlarmEventType.ALARM_DEACTIVATE;
             objectId = "ALARM";
-            return new AlarmEvent(sensorEventType, new StringId(objectId), Application.INVALID_CODE);
+            return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_2);
         }
         if (Math.random() >= 0.5) {
             sensorEventType = DoorEventType.values()[random.nextInt(DoorEventType.values().length)];

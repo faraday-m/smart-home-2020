@@ -15,8 +15,8 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static ru.sbt.mipt.oop.Application.ACTIVATION_CODE;
-import static ru.sbt.mipt.oop.Application.INVALID_CODE;
+import static ru.sbt.mipt.oop.Application.ACTIVATION_CODE_1;
+import static ru.sbt.mipt.oop.Application.ACTIVATION_CODE_2;
 
 public class AlarmWarningTest {
     private EventProcessor processor;
@@ -34,66 +34,61 @@ public class AlarmWarningTest {
     }
 
     @Test
-    public void alarmStateMachineTest_activateWithRightKey() {
-        AlarmSystem alarm = new AlarmSystem(new StringId("ALARM"), ACTIVATION_CODE, AlarmState.DEACTIVATED);
+    public void alarmStateMachineTest_activate() {
+        AlarmSystem alarm = new AlarmSystem(new StringId("ALARM"));
         smartHome.addHomeComponent(HomeElementType.ALARM, alarm);
 
-        alarm.activate(ACTIVATION_CODE);
+        alarm.activate(ACTIVATION_CODE_1);
         assertEquals(AlarmState.ACTIVATED, alarm.getAlarmState());
-    }
-
-    @Test
-    public void alarmStateMachineTest_activateWithInvalidKey() {
-        AlarmSystem alarm = new AlarmSystem(new StringId("ALARM"), ACTIVATION_CODE, AlarmState.DEACTIVATED);
-        smartHome.addHomeComponent(HomeElementType.ALARM, alarm);
-
-        alarm.activate(INVALID_CODE);
-        assertEquals(AlarmState.WARNING, alarm.getAlarmState());
     }
 
 
     @Test
     public void alarmStateMachineTest_deactivateWithRightKey() {
-        AlarmSystem alarm = new AlarmSystem(new StringId("ALARM"), ACTIVATION_CODE, AlarmState.ACTIVATED);
+        AlarmSystem alarm = new AlarmSystem(new StringId("ALARM"));
         smartHome.addHomeComponent(HomeElementType.ALARM, alarm);
-
-        alarm.deactivate(ACTIVATION_CODE);
+        alarm.activate(ACTIVATION_CODE_1);
+        alarm.deactivate(ACTIVATION_CODE_1);
         assertEquals(AlarmState.DEACTIVATED, alarm.getAlarmState());
     }
 
 
     @Test
     public void alarmStateMachineTest_deactivateWithInvalidKey() {
-        AlarmSystem alarm = new AlarmSystem(new StringId("ALARM"), ACTIVATION_CODE, AlarmState.ACTIVATED);
+        AlarmSystem alarm = new AlarmSystem(new StringId("ALARM"));
         smartHome.addHomeComponent(HomeElementType.ALARM, alarm);
-
-        alarm.deactivate(INVALID_CODE);
+        alarm.activate(ACTIVATION_CODE_1);
+        alarm.deactivate(ACTIVATION_CODE_2);
         assertEquals(AlarmState.WARNING, alarm.getAlarmState());
     }
 
     @Test
     public void alarmStateMachineTest_stopWarningWithRightKey() {
-        AlarmSystem alarm = new AlarmSystem(new StringId("ALARM"), ACTIVATION_CODE, AlarmState.WARNING);
+        AlarmSystem alarm = new AlarmSystem(new StringId("ALARM"));
         smartHome.addHomeComponent(HomeElementType.ALARM, alarm);
-
-        alarm.deactivate(ACTIVATION_CODE);
+        alarm.activate(ACTIVATION_CODE_1);
+        alarm.deactivate(ACTIVATION_CODE_2);
+        assertEquals(AlarmState.WARNING, alarm.getAlarmState());
+        alarm.deactivate(ACTIVATION_CODE_1);
         assertEquals(AlarmState.DEACTIVATED, alarm.getAlarmState());
     }
 
 
     @Test
     public void alarmStateMachineTest_stopWarningWithInvalidKey() {
-        AlarmSystem alarm = new AlarmSystem(new StringId("ALARM"), ACTIVATION_CODE, AlarmState.WARNING);
+        AlarmSystem alarm = new AlarmSystem(new StringId("ALARM"));
         smartHome.addHomeComponent(HomeElementType.ALARM, alarm);
-
-        alarm.deactivate(INVALID_CODE);
+        alarm.activate(ACTIVATION_CODE_1);
+        alarm.deactivate(ACTIVATION_CODE_2);
+        assertEquals(AlarmState.WARNING, alarm.getAlarmState());
+        alarm.deactivate(ACTIVATION_CODE_2);
         assertEquals(AlarmState.WARNING, alarm.getAlarmState());
     }
 
 
     @Test
     public void alarmStateMachineTest_turnWarningOn() {
-        AlarmSystem alarm = new AlarmSystem(new StringId("ALARM"), ACTIVATION_CODE, AlarmState.DEACTIVATED);
+        AlarmSystem alarm = new AlarmSystem(new StringId("ALARM"));
         smartHome.addHomeComponent(HomeElementType.ALARM, alarm);
         alarm.warn();
         assertEquals(AlarmState.WARNING, alarm.getAlarmState());

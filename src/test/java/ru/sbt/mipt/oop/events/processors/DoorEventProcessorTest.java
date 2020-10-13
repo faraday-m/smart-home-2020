@@ -4,7 +4,6 @@ package ru.sbt.mipt.oop.events.processors;
 import org.junit.Before;
 import org.junit.Test;
 import ru.sbt.mipt.oop.elements.*;
-import ru.sbt.mipt.oop.elements.alarm.AlarmState;
 import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
 import ru.sbt.mipt.oop.events.DoorEvent;
 import ru.sbt.mipt.oop.events.Event;
@@ -17,7 +16,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
-import static ru.sbt.mipt.oop.Application.ACTIVATION_CODE;
 
 public class DoorEventProcessorTest {
     private EventProcessor processor;
@@ -27,7 +25,7 @@ public class DoorEventProcessorTest {
         try {
             HomeLoader homeLoader = new JsonHomeLoader();
             smartHome = homeLoader.load(new FileInputStream("smart-home-1.js"));
-            smartHome.addHomeComponent(HomeElementType.ALARM, new AlarmSystem(new StringId("ALARM"), ACTIVATION_CODE, AlarmState.DEACTIVATED));
+            smartHome.addHomeComponent(HomeElementType.ALARM, new AlarmSystem(new StringId("ALARM")));
             processor = new DoorEventProcessor();
         } catch (IOException e) {
             fail();

@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class AlarmSystem implements HomeComponent  {
     private ComponentId id;
-    private final int activationHashCode;
+    private int activationHashCode;
     private AlarmBehavior behavior;
     private Map<AlarmState, AlarmBehavior> behaviorMap;
 
@@ -46,20 +46,26 @@ public class AlarmSystem implements HomeComponent  {
         return behavior.getState();
     }
 
-    public AlarmSystem(ComponentId id, Object activationCode, AlarmState defaultState) {
-        this.id = id;
+    public boolean checkActivationCode(Object activationCode) {
+        return (activationCode.hashCode() == activationHashCode);
+    }
+    public void setActivationCode(Object activationCode) {
         this.activationHashCode = activationCode.hashCode();
+    }
+
+    public AlarmSystem(ComponentId id) {
+        this.id = id;
         this.behaviorMap = new LinkedHashMap<>();
-        setAlarmBehavior(defaultState);
+        setAlarmBehavior(AlarmState.DEACTIVATED);
     }
 
     public AlarmSystem activate(Object activationCode) {
-        behavior.activate(activationHashCode, activationCode.hashCode());
+        behavior.activate(activationCode);
         return this;
     }
 
     public AlarmSystem deactivate(Object activationCode) {
-        behavior.deactivate(activationHashCode, activationCode.hashCode());
+        behavior.deactivate(activationCode);
         return this;
     }
 

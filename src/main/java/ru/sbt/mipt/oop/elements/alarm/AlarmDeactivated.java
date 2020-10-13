@@ -8,17 +8,14 @@ public class AlarmDeactivated implements AlarmBehavior {
     }
 
     @Override
-    public void activate(Object activationHashCode, Object providedHashCode) {
-        if (activationHashCode.equals(providedHashCode)) {
-            System.out.println("Alarm is activated");
-            system.setAlarmBehavior(AlarmState.ACTIVATED);
-        } else {
-            this.warn();
-        }
+    public void activate(Object activationCode) {
+        system.setActivationCode(activationCode);
+        system.setAlarmBehavior(AlarmState.ACTIVATED);
+        System.out.println("Alarm is activated");
     }
 
     @Override
-    public void deactivate(Object activationHashCode, Object providedHashCode) {
+    public void deactivate(Object providedCode) {
         System.out.println("Alarm is already deactivated");
     }
 

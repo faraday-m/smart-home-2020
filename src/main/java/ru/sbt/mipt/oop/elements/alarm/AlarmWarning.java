@@ -7,18 +7,13 @@ public class AlarmWarning implements AlarmBehavior {
         this.system = system;
     }
     @Override
-    public void activate(Object activationHashCode, Object providedHashCode) {
-        if (activationHashCode.equals(providedHashCode)) {
-            System.out.println("Alarm activated, end of warning");
-            system.setAlarmBehavior(AlarmState.ACTIVATED);
-        } else {
-            System.out.println("Invalid activation code");
-        }
+    public void activate(Object activationCode) {
+        System.out.println("The system is in warning mode. First deactivate alarm with your actvation code");
     }
 
     @Override
-    public void deactivate(Object activationHashCode, Object providedHashCode) {
-        if (activationHashCode.equals(providedHashCode)) {
+    public void deactivate(Object providedCode) {
+        if (system.checkActivationCode(providedCode)) {
             System.out.println("Alarm deactivated, end of warning");
             system.setAlarmBehavior(AlarmState.DEACTIVATED);
         } else {
