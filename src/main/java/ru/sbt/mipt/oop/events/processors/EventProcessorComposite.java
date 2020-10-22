@@ -5,24 +5,23 @@ import ru.sbt.mipt.oop.events.Event;
 import ru.sbt.mipt.oop.events.EventGenerator;
 import ru.sbt.mipt.oop.events.typedefs.ProcessorType;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class EventProcessorComposite implements EventProcessor {
     private final EventGenerator eventGenerator;
-    private final Map<ProcessorType, EventProcessor> processors;
+    private final Map<ProcessorType, List<EventProcessor>> processors;
 
     public EventProcessorComposite(SmartHome smartHome) {
         eventGenerator = new SensorEventGenerator(smartHome);
-        this.processors = new TreeMap<>();
+        this.processors = new LinkedHashMap<>();
     }
 
     public void addEventProcessor(ProcessorType type, EventProcessor processor) {
-        processors.putIfAbsent(type, processor);
-    }
-
-    public EventProcessor getEventProcessor(ProcessorType type) {
-        return processors.get(type);
+        processors.putIfAbsent(type, new ArrayList<>());
+        if (!processors.get(type).contains(processor)) {
+            processors.get(type).add(processor);
+        }
     }
 
     public Event processEvent(SmartHome smartHome, Event event) {
@@ -31,11 +30,12 @@ public class EventProcessorComposite implements EventProcessor {
         }
         if (event != null) {
             System.out.println("Got event: " + event);
-            Event resultEvent = processors.get(event.getType().getProcessorType()).processEvent(smartHome, event);
-            if (event.equals(resultEvent)) {
-                resultEvent = eventGenerator.getNextEvent();
+            Event finalEvent = event;
+            List<Event> resultEvents = processors.get(event.getType().getProcessorType()).stream().map(p -> p.processEvent(smartHome, finalEvent)).collect(Collectors.toList());
+            if (resultEvents.size() == 1 && resultEvents.get(0).equals(event)) {
+                return eventGenerator.getNextEvent();
             }
-            return resultEvent;
+            return resultEvents.get(resultEvents.size()-1); //пока что такой логики достаточно
         } else {
             return null;
         }

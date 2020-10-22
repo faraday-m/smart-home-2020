@@ -8,9 +8,9 @@ public class SmartHomeEngine implements Engine {
     EventProcessorComposite processorComposite;
     SmartHome smartHome;
 
-    public SmartHomeEngine(SmartHome home) {
-        smartHome = home;
-        processorComposite = new EventProcessorComposite(smartHome);
+    public SmartHomeEngine(SmartHome home, EventProcessorComposite processorComposite) {
+        this.smartHome = home;
+        this.processorComposite = processorComposite;
         processorComposite.addEventProcessor(EventProcessorType.DOOR, new DoorEventProcessor());
         processorComposite.addEventProcessor(EventProcessorType.LIGHT, new LightEventProcessor());
         processorComposite.addEventProcessor(EventProcessorType.HALL_DOOR, new HallDoorEventProcessor());
