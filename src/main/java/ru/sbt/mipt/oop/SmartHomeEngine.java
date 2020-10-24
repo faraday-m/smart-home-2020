@@ -6,11 +6,15 @@ public class SmartHomeEngine implements Engine {
     EventProcessorComposite processorComposite;
     SmartHome smartHome;
 
-    public SmartHomeEngine(SmartHome home) {
+    private static void fillProcessorComposite(EventProcessorComposite processorComposite) {
+        processorComposite.addEventProcessor(new DoorEventProcessor());
+        processorComposite.addEventProcessor(new LightEventProcessor());
+    }
+
+    public SmartHomeEngine(SmartHome home, EventProcessorComposite processorComposite) {
         smartHome = home;
-        processorComposite = new EventProcessorComposite();
-        processorComposite.addEventProcessor(EventProcessorType.DOOR, new DoorEventProcessor());
-        processorComposite.addEventProcessor(EventProcessorType.LIGHT, new LightEventProcessor());
+        this.processorComposite = processorComposite;
+        fillProcessorComposite(processorComposite);
     }
 
     public void start() {

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class HomeBuilder {
-
     public static void main(String[] args) throws IOException {
         Room kitchen = RoomFactory.getKitchen();
         Room bathroom = RoomFactory.getBathroom();

@@ -1,7 +1,6 @@
 package ru.sbt.mipt.oop;
 
-import ru.sbt.mipt.oop.events.SensorEvent;
-import ru.sbt.mipt.oop.events.SensorEventGenerator;
+import ru.sbt.mipt.oop.events.*;
 import ru.sbt.mipt.oop.init.HomeLoader;
 import ru.sbt.mipt.oop.init.JsonHomeLoader;
 
@@ -22,11 +21,12 @@ public class Application {
         application.run();
     }
 
+
     private void run() {
         // считываем состояние дома из файла
         try {
             SmartHome smartHome = homeLoader.load(new FileInputStream("smart-home-1.js"));
-            Engine engine = new SmartHomeEngine(smartHome);
+            Engine engine = new SmartHomeEngine(smartHome, new EventProcessorComposite(new SensorEventGenerator()));
             engine.start();
 
         } catch (IOException e) {

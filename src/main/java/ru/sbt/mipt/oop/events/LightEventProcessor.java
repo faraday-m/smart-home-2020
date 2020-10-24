@@ -7,17 +7,18 @@ import ru.sbt.mipt.oop.elements.Light;
 import ru.sbt.mipt.oop.elements.Room;
 import ru.sbt.mipt.oop.commands.SimpleSensorCommand;
 
-import static ru.sbt.mipt.oop.events.SensorEventType.LIGHT_ON;
+import static ru.sbt.mipt.oop.events.SensorEventType.*;
 
 public class LightEventProcessor implements EventProcessor {
     public SensorEvent processEvent(SmartHome smartHome, SensorEvent event) {
         if (event.getType() == SensorEventType.LIGHTS_OFF) {
             setAllLights(smartHome, false, CommandType.LIGHT_OFF);
-        }
-        for (Room room : smartHome.getRooms()) {
-            Light light = room.getLight(event.getObjectId());
-            if (light != null) {
-                room.changeLight(event.getObjectId(), (event.getType() == LIGHT_ON));
+        } else if (event.getType() == LIGHT_ON || event.getType() == LIGHT_OFF) {
+            for (Room room : smartHome.getRooms()) {
+                Light light = room.getLight(event.getObjectId());
+                if (light != null) {
+                    room.changeLight(event.getObjectId(), (event.getType() == LIGHT_ON));
+                }
             }
         }
         return event;

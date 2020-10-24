@@ -2,36 +2,38 @@ package ru.sbt.mipt.oop.events;
 
 import ru.sbt.mipt.oop.SmartHome;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.stream.Collectors;
 
 public class EventProcessorComposite {
     private final SensorEventGenerator sensorEventGenerator;
-    private final Map<EventProcessorType, EventProcessor> processors;
+    private final List<EventProcessor> processors;
 
-    public EventProcessorComposite() {
-        sensorEventGenerator = new SensorEventGenerator();
-        this.processors = new TreeMap<>();
+    public EventProcessorComposite(SensorEventGenerator eventGenerator) {
+        sensorEventGenerator = eventGenerator;
+        this.processors = new ArrayList<>();
     }
 
-    public void addEventProcessor(EventProcessorType type, EventProcessor processor) {
-        processors.putIfAbsent(type, processor);
-    }
-
-    public EventProcessor getEventProcessor(EventProcessorType type) {
-        return processors.get(type);
+    public void addEventProcessor(EventProcessor processor) {
+        processors.add(processor);
     }
 
     public SensorEvent processEvent(SmartHome smartHome, SensorEvent event) {
         if (event == null) {
             event = sensorEventGenerator.getNextSensorEvent();
         }
-        System.out.println("Got event: " + event);
-        SensorEvent resultEvent = processors.get(event.getType().getProcessorType()).processEvent(smartHome, event);
-        if (resultEvent.equals(event)) {
-            resultEvent = sensorEventGenerator.getNextSensorEvent();
+        Queue<SensorEvent> events = new LinkedBlockingQueue<>();
+        events.add(event);
+        while (events.size() > 0) {
+            SensorEvent proceedingEvent = events.remove();
+            System.out.println("Got event: " + proceedingEvent);
+            List<SensorEvent> newEvents = processors.stream().map(p -> p.processEvent(smartHome, proceedingEvent)).filter(e -> !e.equals(proceedingEvent)).collect(Collectors.toList());
+            events.addAll(newEvents);
         }
-        return resultEvent;
+        return sensorEventGenerator.getNextSensorEvent();
     }
 
 }
