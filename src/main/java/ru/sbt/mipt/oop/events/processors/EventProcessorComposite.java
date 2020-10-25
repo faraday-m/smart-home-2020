@@ -21,11 +21,11 @@ public class EventProcessorComposite {
         processors.add(processor);
     }
 
-    public ru.sbt.mipt.oop.events.Event processEvent(SmartHome smartHome, ru.sbt.mipt.oop.events.Event event) {
+    public Event processEvent(SmartHome smartHome, Event event) {
         if (event == null) {
             event = sensorEventGenerator.getNextEvent();
         }
-        Queue<ru.sbt.mipt.oop.events.Event> events = new LinkedBlockingQueue<>();
+        Queue<Event> events = new LinkedBlockingQueue<>();
         events.add(event);
         while (events.size() > 0) {
             ru.sbt.mipt.oop.events.Event proceedingEvent = events.remove();
