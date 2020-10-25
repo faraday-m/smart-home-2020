@@ -1,5 +1,5 @@
 package ru.sbt.mipt.oop.events.typedefs;
 
-public interface EventType {
-    ProcessorType getProcessorType();
+public enum EventType {
+    LIGHT_ON, LIGHT_OFF, DOOR_OPEN, DOOR_CLOSED, LIGHTS_OFF
 }

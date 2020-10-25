@@ -11,10 +11,14 @@ public class SmartHomeEngine implements Engine {
     public SmartHomeEngine(SmartHome home, EventProcessorComposite processorComposite) {
         this.smartHome = home;
         this.processorComposite = processorComposite;
-        processorComposite.addEventProcessor(EventProcessorType.DOOR, new DoorEventProcessor());
-        processorComposite.addEventProcessor(EventProcessorType.LIGHT, new LightEventProcessor());
-        processorComposite.addEventProcessor(EventProcessorType.HALL_DOOR, new HallDoorEventProcessor());
+        fillProcessorComposite(processorComposite);
     }
+
+    private static void fillProcessorComposite(EventProcessorComposite processorComposite) {
+        processorComposite.addEventProcessor(new DoorEventProcessor());
+        processorComposite.addEventProcessor(new LightEventProcessor());
+    }
+
 
     public void start() {
         // начинаем цикл обработки событий

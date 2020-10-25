@@ -2,16 +2,12 @@ package ru.sbt.mipt.oop.events.processors;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.sbt.mipt.oop.Engine;
-import ru.sbt.mipt.oop.SmartHomeEngine;
 import ru.sbt.mipt.oop.commands.CommandType;
 import ru.sbt.mipt.oop.commands.SimpleSensorCommand;
 import ru.sbt.mipt.oop.elements.*;
-import ru.sbt.mipt.oop.events.DoorEvent;
 import ru.sbt.mipt.oop.events.Event;
 import ru.sbt.mipt.oop.events.HallDoorEvent;
-import ru.sbt.mipt.oop.events.typedefs.DoorEventType;
-import ru.sbt.mipt.oop.events.typedefs.HallDoorEventType;
+import ru.sbt.mipt.oop.events.typedefs.EventType;
 import ru.sbt.mipt.oop.init.HomeLoader;
 import ru.sbt.mipt.oop.init.JsonHomeLoader;
 
@@ -38,17 +34,8 @@ public class HallDoorEventProcessorTest {
     }
 
     @Test
-    public void processHallDoorEvent_lightsOn() {
-        Event event = new HallDoorEvent(HallDoorEventType.LIGHTS_ON, smartHome.getId(), new SimpleSensorCommand(CommandType.LIGHT_ON, smartHome.getId()));
-        Event newEvent = processor.processEvent(smartHome, event);
-        assertEquals(event, newEvent);
-        Collection<Light> lights = (Collection<Light>) smartHome.getComponents((HomeComponent c) -> c.getType().equals(HomeElementType.LIGHT));
-        assertTrue(lights.stream().map(Light::isOn).allMatch(Predicate.isEqual(true)));
-    }
-
-    @Test
     public void processHallDoorEvent_lightsOff() {
-        Event event = new HallDoorEvent(HallDoorEventType.LIGHTS_OFF, smartHome.getId(), new SimpleSensorCommand(CommandType.LIGHT_OFF, smartHome.getId()));
+        Event event = new HallDoorEvent(EventType.LIGHTS_OFF, smartHome.getId(), new SimpleSensorCommand(CommandType.LIGHT_OFF, smartHome.getId()));
         Event newEvent = processor.processEvent(smartHome, event);
         assertEquals(event, newEvent);
         Collection<Light> lights = (Collection<Light>) smartHome.getComponents((HomeComponent c) -> c.getType().equals(HomeElementType.LIGHT));

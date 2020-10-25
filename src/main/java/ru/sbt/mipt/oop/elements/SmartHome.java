@@ -2,11 +2,12 @@ package ru.sbt.mipt.oop.elements;
 
 import ru.sbt.mipt.oop.actions.Action;
 import ru.sbt.mipt.oop.events.Event;
-import ru.sbt.mipt.oop.events.typedefs.HallDoorEventType;
 
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static ru.sbt.mipt.oop.events.typedefs.EventType.LIGHTS_OFF;
 
 public class SmartHome implements HomeComponent, HomeComponentComposite {
     private Collection<Room> rooms;
@@ -65,7 +66,7 @@ public class SmartHome implements HomeComponent, HomeComponentComposite {
     public Event apply(Event event, Action action) {
         Event newEvent = rooms.stream()
                 .map((Room r) -> r.apply(event, action))
-                .filter((Event e) -> (e.getType() instanceof HallDoorEventType)).collect(Collectors.toList()).stream().findFirst().orElse(null);
+                .filter((Event e) -> (e.getType() == LIGHTS_OFF)).collect(Collectors.toList()).stream().findFirst().orElse(null);
         if (newEvent != null) {
             return newEvent;
         }
