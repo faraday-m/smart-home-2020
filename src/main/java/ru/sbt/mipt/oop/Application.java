@@ -26,7 +26,7 @@ public class Application {
         // считываем состояние дома из файла
         try {
             SmartHome smartHome = homeLoader.load(new FileInputStream("smart-home-1.js"));
-            Engine engine = new SmartHomeEngine(smartHome, new EventProcessorComposite(new SensorEventGenerator()));
+            Engine engine = new SmartHomeEngine(smartHome, new SensorEventGenerator());
             engine.start();
 
         } catch (IOException e) {

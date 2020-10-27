@@ -10,10 +10,8 @@ import ru.sbt.mipt.oop.commands.SimpleSensorCommand;
 import static ru.sbt.mipt.oop.events.SensorEventType.*;
 
 public class LightEventProcessor implements EventProcessor {
-    public SensorEvent processEvent(SmartHome smartHome, SensorEvent event) {
-        if (event.getType() == SensorEventType.LIGHTS_OFF) {
-            setAllLights(smartHome, false, CommandType.LIGHT_OFF);
-        } else if (event.getType() == LIGHT_ON || event.getType() == LIGHT_OFF) {
+    public void processEvent(SmartHome smartHome, SensorEvent event) {
+        if (event.getType() == LIGHT_ON || event.getType() == LIGHT_OFF) {
             for (Room room : smartHome.getRooms()) {
                 Light light = room.getLight(event.getObjectId());
                 if (light != null) {
@@ -21,7 +19,6 @@ public class LightEventProcessor implements EventProcessor {
                 }
             }
         }
-        return event;
     }
 
     public void setAllLights(SmartHome smartHome, boolean isOn, CommandType lightCommand) {
