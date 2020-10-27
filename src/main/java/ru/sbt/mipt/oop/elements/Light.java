@@ -34,10 +34,9 @@ public class Light implements HomeComponent {
     }
 
     @Override
-    public Event apply(Event event, Action action) {
+    public void apply(Event event, Action action) {
         if ((event.getType() == LIGHTS_OFF) || (((event.getType() == LIGHT_ON) || (event.getType() == LIGHT_OFF)) && event.getObjectId().equals(this.id))) {
             action.accept(this);
         }
-        return event;
     }
 }

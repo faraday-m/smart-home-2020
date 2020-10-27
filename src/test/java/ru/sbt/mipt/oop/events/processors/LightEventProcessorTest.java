@@ -5,11 +5,10 @@ import org.junit.Test;
 import ru.sbt.mipt.oop.elements.*;
 import ru.sbt.mipt.oop.events.Event;
 import ru.sbt.mipt.oop.events.LightEvent;
-import ru.sbt.mipt.oop.init.HomeLoader;
-import ru.sbt.mipt.oop.init.JsonHomeLoader;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static ru.sbt.mipt.oop.events.typedefs.EventType.LIGHT_OFF;
@@ -18,36 +17,33 @@ import static ru.sbt.mipt.oop.events.typedefs.EventType.LIGHT_ON;
 public class LightEventProcessorTest {
     private EventProcessor processor;
     private SmartHome smartHome;
+    private Map<ComponentId, Light> testLights;
+
     @Before
     public void initializeHome() {
-        try {
-            HomeLoader homeLoader = new JsonHomeLoader();
-            smartHome = homeLoader.load(new FileInputStream("smart-home-1.js"));
-            processor = new LightEventProcessor();
-        } catch (IOException e) {
-            fail();
-        }
+        testLights = new LinkedHashMap<>();
+        testLights.put(new StringId("1"), new Light("1", false));
+        testLights.put(new StringId("2"), new Light("2", true));
+        Room room1 = new Room(testLights, new LinkedHashMap<>(), "kitchen");
+        smartHome = new SmartHome(Collections.singletonList(room1));
+        processor = new LightEventProcessor();
     }
 
     @Test
     public void processLightEvent_turnsOn() {
-        ComponentId lightId = new StringId("4");
-        Light testLight = (Light) smartHome.getComponent((HomeComponent c) -> c.getType().equals(HomeElementType.LIGHT) && c.getId().equals(lightId));
-        assertFalse(testLight.isOn());
+        ComponentId lightId = new StringId("1");
+        assertFalse(testLights.get(lightId).isOn());
         Event event = new LightEvent(LIGHT_ON, lightId);
-        Event newEvent = processor.processEvent(smartHome, event);
-        assertTrue(testLight.isOn());
-        assertEquals(event, newEvent);
+        processor.processEvent(smartHome, event);
+        assertTrue(testLights.get(lightId).isOn());
     }
 
     @Test
     public void processLightEvent_turnsOff() {
         ComponentId lightId = new StringId("2");
-        Light testLight = (Light) smartHome.getComponent((HomeComponent c) -> c.getType().equals(HomeElementType.LIGHT) && c.getId().equals(lightId));
-        assertTrue(testLight.isOn());
+        assertTrue(testLights.get(lightId).isOn());
         Event event = new LightEvent(LIGHT_OFF, lightId);
-        Event newEvent = processor.processEvent(smartHome, event);
-        assertFalse(testLight.isOn());
-        assertEquals(event, newEvent);
+        processor.processEvent(smartHome, event);
+        assertFalse(testLights.get(lightId).isOn());
     }
 }

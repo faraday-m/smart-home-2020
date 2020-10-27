@@ -7,62 +7,40 @@ import ru.sbt.mipt.oop.elements.*;
 import ru.sbt.mipt.oop.events.DoorEvent;
 import ru.sbt.mipt.oop.events.Event;
 import ru.sbt.mipt.oop.events.typedefs.EventType;
-import ru.sbt.mipt.oop.init.HomeLoader;
-import ru.sbt.mipt.oop.init.JsonHomeLoader;
-
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
 public class DoorEventProcessorTest {
     private EventProcessor processor;
     private SmartHome smartHome;
+    private Map<ComponentId, Door> testDoors;
+
     @Before
     public void initializeHome() {
-        try {
-            HomeLoader homeLoader = new JsonHomeLoader();
-            smartHome = homeLoader.load(new FileInputStream("smart-home-1.js"));
-            processor = new DoorEventProcessor();
-        } catch (IOException e) {
-            fail();
-        }
+        testDoors = new LinkedHashMap<>();
+        testDoors.put(new StringId("1"), new Door("1", false));
+        testDoors.put(new StringId("2"), new Door("2", true));
+        Room room1 = new Room(new LinkedHashMap<>(), testDoors, "kitchen");
+        smartHome = new SmartHome(Collections.singletonList(room1));
+        processor = new DoorEventProcessor();
     }
 
     @Test
     public void processDoorEvent_opensDoor() {
-        ComponentId doorId = new StringId("2");
-        Door testDoor = (Door) smartHome.getComponent((HomeComponent c) -> c.getType().equals(HomeElementType.DOOR) && c.getId().equals(doorId));
-        assertFalse(testDoor.isOpen());
+        ComponentId doorId = new StringId("1");
+        assertFalse(testDoors.get(doorId).isOpen());
         Event event = new DoorEvent(EventType.DOOR_OPEN, doorId);
-        Event newEvent = processor.processEvent(smartHome, event);
-        assertTrue(testDoor.isOpen());
-        assertEquals(event, newEvent);
+        processor.processEvent(smartHome, event);
+        assertTrue(testDoors.get(doorId).isOpen());
     }
 
     @Test
     public void processDoorEvent_closesDoor() {
-        ComponentId doorId = new StringId("3");
-        Door testDoor = (Door) smartHome.getComponent((HomeComponent c) -> c.getType().equals(HomeElementType.DOOR) && c.getId().equals(doorId));
-        assertTrue(testDoor.isOpen());
-
+        ComponentId doorId = new StringId("2");
+        assertTrue(testDoors.get(doorId).isOpen());
         Event event = new DoorEvent(EventType.DOOR_CLOSED, doorId);
-        Event newEvent = processor.processEvent(smartHome, event);
-        assertFalse(testDoor.isOpen());
-        assertEquals(event, newEvent);
-    }
-
-    @Test
-    public void processDoorEvent_closesHallDoor() {
-        ComponentId doorId = new StringId("4");
-        Door testDoor = (Door) smartHome.getComponent((HomeComponent c) -> c.getType().equals(HomeElementType.DOOR) && c.getId().equals(doorId));
-        assertFalse(testDoor.isOpen());
-
-        Event event = new DoorEvent(EventType.DOOR_CLOSED, doorId);
-        Event newEvent = processor.processEvent(smartHome, event);
-        assertFalse(testDoor.isOpen());
-        assertNotSame(event, newEvent);
-        assertEquals(newEvent.getType(), EventType.LIGHTS_OFF);
-
+        processor.processEvent(smartHome, event);
+        assertFalse(testDoors.get(doorId).isOpen());
     }
 }

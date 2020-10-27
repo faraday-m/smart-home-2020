@@ -34,14 +34,14 @@ public class SensorEventGenerator implements EventGenerator {
             } else {
                 sensorEventType = DOOR_CLOSED;
             }
-            objectId = String.valueOf(random.nextInt(smartHome.getElementCount(HomeElementType.DOOR) + 1));
+            objectId = String.valueOf(random.nextInt(5));
         } else {
             if (rand > 0.75) {
                 sensorEventType = LIGHT_OFF;
             } else {
                 sensorEventType = LIGHT_ON;
             }
-            objectId = String.valueOf(random.nextInt(smartHome.getElementCount(HomeElementType.LIGHT) + 1));
+            objectId = String.valueOf(random.nextInt(10));
         }
 
         if (sensorEventType == DOOR_OPEN || sensorEventType == DOOR_CLOSED) {

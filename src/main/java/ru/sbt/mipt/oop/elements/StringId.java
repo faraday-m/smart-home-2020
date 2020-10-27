@@ -22,4 +22,9 @@ public class StringId implements ComponentId {
         if (obj == this) return true;
         return (this.toString().equals(obj.toString()));
     }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
 }
