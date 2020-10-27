@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import ru.sbt.mipt.oop.elements.SmartHome;
 import ru.sbt.mipt.oop.elements.ComponentId;
+import ru.sbt.mipt.oop.elements.StringId;
+import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
 import ru.sbt.mipt.oop.utils.StringIdInterfaceAdapter;
 
 import java.io.*;
@@ -14,7 +16,9 @@ public class JsonHomeLoader implements HomeLoader {
 
     public SmartHome load(InputStream stream)  {
         JsonReader jsonReader = new JsonReader(new InputStreamReader(stream));
-        return gson.fromJson(jsonReader, SmartHome.class);
+        SmartHome home = gson.fromJson(jsonReader, SmartHome.class);
+        home.setAlarmSystem(new AlarmSystem());
+        return home;
     }
 
     public void save(SmartHome smartHome, OutputStream stream) {

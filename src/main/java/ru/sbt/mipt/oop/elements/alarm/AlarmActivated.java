@@ -16,7 +16,7 @@ public class AlarmActivated implements AlarmBehavior {
     public void deactivate(Object providedCode) {
         if (system.checkActivationCode(providedCode)) {
             System.out.println("Alarm deactivated");
-            system.setAlarmBehavior(AlarmState.DEACTIVATED);
+            system.setAlarmBehavior(new AlarmDeactivated(system));
         } else {
             this.warn();
         }
@@ -25,7 +25,7 @@ public class AlarmActivated implements AlarmBehavior {
     @Override
     public void warn() {
         System.out.println("Turning warning mode on!");
-        system.setAlarmBehavior(AlarmState.WARNING);
+        system.setAlarmBehavior(new AlarmWarning(system));
     }
 
     @Override

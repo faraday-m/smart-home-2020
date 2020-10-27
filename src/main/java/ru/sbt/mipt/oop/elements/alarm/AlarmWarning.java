@@ -15,7 +15,7 @@ public class AlarmWarning implements AlarmBehavior {
     public void deactivate(Object providedCode) {
         if (system.checkActivationCode(providedCode)) {
             System.out.println("Alarm deactivated, end of warning");
-            system.setAlarmBehavior(AlarmState.DEACTIVATED);
+            system.setAlarmBehavior(new AlarmDeactivated(system));
         } else {
             System.out.println("Invalid deactivation code");
         }

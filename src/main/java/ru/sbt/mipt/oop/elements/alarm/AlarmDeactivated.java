@@ -10,7 +10,7 @@ public class AlarmDeactivated implements AlarmBehavior {
     @Override
     public void activate(Object activationCode) {
         system.setActivationCode(activationCode);
-        system.setAlarmBehavior(AlarmState.ACTIVATED);
+        system.setAlarmBehavior(new AlarmActivated(system));
         System.out.println("Alarm is activated");
     }
 
@@ -22,7 +22,7 @@ public class AlarmDeactivated implements AlarmBehavior {
     @Override
     public void warn() {
         System.out.println("Turning warning mode on!");
-        system.setAlarmBehavior(AlarmState.WARNING);
+        system.setAlarmBehavior(new AlarmWarning(system));
     }
 
     @Override

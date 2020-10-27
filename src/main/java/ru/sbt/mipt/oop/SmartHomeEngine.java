@@ -5,23 +5,23 @@ import ru.sbt.mipt.oop.events.*;
 import ru.sbt.mipt.oop.events.processors.*;
 
 public class SmartHomeEngine implements Engine {
-    EventProcessorComposite processorComposite;
-    SmartHome smartHome;
+    private final EventDecorator eventDecorator;
+    private final SensorEventGenerator sensorEventGenerator;
 
-    public SmartHomeEngine(SmartHome home) {
-        smartHome = home;
-        processorComposite = new EventProcessorComposite(smartHome);
-        processorComposite.addEventProcessor(EventProcessorType.DOOR, new DoorEventProcessor());
-        processorComposite.addEventProcessor(EventProcessorType.LIGHT, new LightEventProcessor());
-        processorComposite.addEventProcessor(EventProcessorType.HALL_DOOR, new HallDoorEventProcessor());
-        processorComposite.addEventProcessor(EventProcessorType.ALARM, new AlarmProcessor());
+    public SmartHomeEngine(EventDecorator eventDecorator, SensorEventGenerator sensorEventGenerator) {
+        this.eventDecorator = eventDecorator;
+        this.sensorEventGenerator = sensorEventGenerator;
     }
+
 
     public void start() {
         // начинаем цикл обработки событий
-        Event event = null;
-        do {
-            event = processorComposite.processEvent(smartHome, event);
-        } while (event != null);
+        for (Event event = sensorEventGenerator.getNextEvent();
+             event != null;
+             event = sensorEventGenerator.getNextEvent()) {
+            Event currentEvent = event;
+            System.out.println("Got event: " + currentEvent);
+            eventDecorator.processEvent(event);
+        }
     }
 }

@@ -1,10 +1,8 @@
 package ru.sbt.mipt.oop;
 
-import ru.sbt.mipt.oop.elements.HomeElementType;
 import ru.sbt.mipt.oop.elements.SmartHome;
-import ru.sbt.mipt.oop.elements.StringId;
-import ru.sbt.mipt.oop.elements.alarm.AlarmState;
-import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
+import ru.sbt.mipt.oop.events.processors.EventDecorator;
+import ru.sbt.mipt.oop.events.processors.SensorEventGenerator;
 import ru.sbt.mipt.oop.init.HomeLoader;
 import ru.sbt.mipt.oop.init.JsonHomeLoader;
 
@@ -26,12 +24,12 @@ public class Application {
         application.run();
     }
 
+
     private void run() {
         // считываем состояние дома из файла
         try {
             SmartHome smartHome = homeLoader.load(new FileInputStream("smart-home-1.js"));
-            smartHome.addHomeComponent(HomeElementType.ALARM, new AlarmSystem(new StringId("ALARM")));
-            Engine engine = new SmartHomeEngine(smartHome);
+            Engine engine = new SmartHomeEngine(new EventDecorator(smartHome), new SensorEventGenerator(smartHome));
             engine.start();
 
         } catch (IOException e) {

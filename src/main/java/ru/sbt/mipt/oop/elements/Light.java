@@ -2,8 +2,8 @@ package ru.sbt.mipt.oop.elements;
 
 import ru.sbt.mipt.oop.actions.Action;
 import ru.sbt.mipt.oop.events.Event;
-import ru.sbt.mipt.oop.events.typedefs.HallDoorEventType;
-import ru.sbt.mipt.oop.events.typedefs.LightEventType;
+
+import static ru.sbt.mipt.oop.events.typedefs.EventType.*;
 
 public class Light implements HomeComponent {
     private ComponentId id;
@@ -34,10 +34,9 @@ public class Light implements HomeComponent {
     }
 
     @Override
-    public Event apply(Event event, Action action) {
-        if ((event.getType() instanceof HallDoorEventType) || ((event.getType() instanceof LightEventType) && event.getObjectId().equals(this.id))) {
+    public void apply(Event event, Action action) {
+        if ((event.getType() == LIGHTS_OFF) || (((event.getType() == LIGHT_ON) || (event.getType() == LIGHT_OFF)) && event.getObjectId().equals(this.id))) {
             action.accept(this);
         }
-        return event;
     }
 }
