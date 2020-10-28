@@ -33,12 +33,14 @@ public class EventDecorator implements EventHandler {
         Event eventAdapter = new SensorEventAdapter(event);
         GetAlarmStateEvent alarmStateEvent = new GetAlarmStateEvent();
         processors.forEach(p -> p.processEvent(smartHome, alarmStateEvent));
-        if (alarmStateEvent.getState() != AlarmState.ACTIVATED || eventAdapter.getType().isAlarmEvent()) {
+        if (alarmStateEvent.getState() == AlarmState.DEACTIVATED || eventAdapter.getType().isAlarmEvent()) {
             processors.forEach(p -> p.processEvent(smartHome, eventAdapter));
         } else {
-            Event alarmWarning = new AlarmEvent(EventType.ALARM_WARNING, new StringId("ALARM"), null);
-            processors.forEach(p -> p.processEvent(smartHome, alarmWarning));
-            sendSms("Trespassing!");
+            if (alarmStateEvent.getState() == AlarmState.ACTIVATED) {
+                sendSms("Trespassing!");
+                Event alarmWarning = new AlarmEvent(EventType.ALARM_WARNING, new StringId("ALARM"), null);
+                processors.forEach(p -> p.processEvent(smartHome, alarmWarning));
+            }
         }
     }
 

@@ -5,16 +5,22 @@ import ru.sbt.mipt.oop.elements.ComponentId;
 import ru.sbt.mipt.oop.elements.StringId;
 import ru.sbt.mipt.oop.events.typedefs.EventType;
 
-public class SensorEventAdapter implements Event{
+public class SensorEventAdapter extends AlarmEvent {
     private CCSensorEvent sensorEvent;
+    private static final String ALARM_CODE = "activationCode";
 
     public SensorEventAdapter(CCSensorEvent event) {
+        super(getType(event), new StringId(event.getObjectId()), ALARM_CODE);
         this.sensorEvent = event;
     }
 
     @Override
     public EventType getType() {
-        switch (sensorEvent.getEventType()) {
+        return getType(sensorEvent);
+    }
+
+    private static EventType getType(CCSensorEvent event) {
+        switch (event.getEventType()) {
             case "LightIsOn":
                 return EventType.LIGHT_ON;
             case "LightIsOff":
@@ -24,9 +30,9 @@ public class SensorEventAdapter implements Event{
             case "DoorIsClosed":
                 return EventType.DOOR_CLOSED;
             case "DoorIsLocked":
-                return EventType.DOOR_LOCKED;
+                return EventType.ALARM_ACTIVATE;
             case "DoorIsUnlocked":
-                return EventType.DOOR_UNLOCKED;
+                return EventType.ALARM_DEACTIVATE;
             default:
                 return null;
         }
@@ -34,6 +40,10 @@ public class SensorEventAdapter implements Event{
 
     @Override
     public ComponentId getObjectId() {
-        return new StringId(sensorEvent.getObjectId());
+        if (!getType().isAlarmEvent()) {
+            return new StringId(sensorEvent.getObjectId());
+        } else {
+            return new StringId("ALARM");
+        }
     }
 }

@@ -10,10 +10,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static ru.sbt.mipt.oop.events.processors.SensorEventGenerator.ACTIVATION_CODE_1;
-import static ru.sbt.mipt.oop.events.processors.SensorEventGenerator.ACTIVATION_CODE_2;
 
 public class AlarmWarningTest {
+    public static final String ACTIVATION_CODE_1 = "code";
+    public static final String ACTIVATION_CODE_2 = "other";
+
     private Map<ComponentId, Door> testDoors;
     private AlarmSystem alarmSystem;
 
