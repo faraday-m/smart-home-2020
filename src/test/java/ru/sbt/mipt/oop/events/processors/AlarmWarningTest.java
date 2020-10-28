@@ -6,17 +6,14 @@ import ru.sbt.mipt.oop.elements.*;
 import ru.sbt.mipt.oop.elements.alarm.AlarmState;
 import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static ru.sbt.mipt.oop.Application.ACTIVATION_CODE_1;
-import static ru.sbt.mipt.oop.Application.ACTIVATION_CODE_2;
+import static ru.sbt.mipt.oop.events.processors.SensorEventGenerator.ACTIVATION_CODE_1;
+import static ru.sbt.mipt.oop.events.processors.SensorEventGenerator.ACTIVATION_CODE_2;
 
 public class AlarmWarningTest {
-    private EventProcessor processor;
-    private SmartHome smartHome;
     private Map<ComponentId, Door> testDoors;
     private AlarmSystem alarmSystem;
 
@@ -27,8 +24,6 @@ public class AlarmWarningTest {
         testDoors.put(new StringId("1"), door);
         Room room = new Room(new LinkedHashMap<>(), testDoors, "kitchen");
         alarmSystem = new AlarmSystem();
-        smartHome = new SmartHome(Collections.singletonList(room), alarmSystem);
-        processor = new AlarmProcessor();
     }
 
     @Test

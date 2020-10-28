@@ -13,6 +13,8 @@ import static ru.sbt.mipt.oop.events.typedefs.EventType.*;
 public class SensorEventGenerator implements EventGenerator {
     public Random random = new Random();
     SmartHome smartHome;
+    public static String ACTIVATION_CODE_1 = "code1";
+    public static String ACTIVATION_CODE_2 = "code2";
 
     public SensorEventGenerator(SmartHome smartHome) {
         this.smartHome = smartHome;
@@ -31,19 +33,19 @@ public class SensorEventGenerator implements EventGenerator {
         if (Math.random() < 0.1) {
             sensorEventType = EventType.ALARM_ACTIVATE;
             objectId = "ALARM";
-            return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_1);
+            return new AlarmEvent(sensorEventType, new StringId(objectId), ACTIVATION_CODE_1);
         } else if (Math.random() < 0.1) {
             sensorEventType = EventType.ALARM_DEACTIVATE;
             objectId = "ALARM";
-            return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_1);
+            return new AlarmEvent(sensorEventType, new StringId(objectId), ACTIVATION_CODE_1);
         } else if (Math.random() < 0.1) {
             sensorEventType = EventType.ALARM_ACTIVATE;
             objectId = "ALARM";
-            return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_2);
+            return new AlarmEvent(sensorEventType, new StringId(objectId), ACTIVATION_CODE_2);
         } else if (Math.random() < 0.1) {
             sensorEventType = EventType.ALARM_DEACTIVATE;
             objectId = "ALARM";
-            return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_2);
+            return new AlarmEvent(sensorEventType, new StringId(objectId), ACTIVATION_CODE_2);
         }
         double rand = Math.random();
         if (rand >= 0.5) {

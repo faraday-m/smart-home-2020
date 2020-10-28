@@ -1,7 +1,7 @@
 package ru.sbt.mipt.oop.events.typedefs;
 
 public enum EventType {
-    LIGHT_ON, LIGHT_OFF, DOOR_OPEN, DOOR_CLOSED, LIGHTS_OFF, GET_HALLDOOR,
+    LIGHT_ON, LIGHT_OFF, DOOR_OPEN, DOOR_CLOSED, DOOR_LOCKED, DOOR_UNLOCKED, LIGHTS_OFF, GET_HALLDOOR,
     ALARM_ACTIVATE, ALARM_DEACTIVATE, ALARM_WARNING, GET_ALARM_STATE;
 
     public boolean isLightEvent() {
@@ -9,7 +9,7 @@ public enum EventType {
     }
 
     public boolean isDoorEvent() {
-        return (this.equals(DOOR_OPEN) || this.equals(DOOR_CLOSED));
+        return (this.equals(DOOR_OPEN) || this.equals(DOOR_CLOSED) || this.equals(DOOR_LOCKED) || this.equals(DOOR_UNLOCKED));
     }
 
     public boolean isAlarmEvent() {
