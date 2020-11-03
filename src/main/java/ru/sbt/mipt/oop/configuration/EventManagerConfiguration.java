@@ -4,7 +4,7 @@ import com.coolcompany.smarthome.events.SensorEventsManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.sbt.mipt.oop.elements.SmartHome;
-import ru.sbt.mipt.oop.events.processors.EventDecorator;
+import ru.sbt.mipt.oop.events.processors.*;
 import ru.sbt.mipt.oop.init.JsonHomeLoader;
 
 import java.io.FileInputStream;
@@ -15,7 +15,7 @@ public class EventManagerConfiguration {
     @Bean
     public SensorEventsManager getEventManager() {
         SensorEventsManager manager = new SensorEventsManager();
-        manager.registerEventHandler(new EventDecorator(getSmartHome()));
+        manager.registerEventHandler(getEventDecorator());
         return manager;
     }
 
@@ -28,5 +28,32 @@ public class EventManagerConfiguration {
         }
         return null;
     }
-
+    
+    @Bean
+    public EventDecorator getEventDecorator() {
+        EventDecorator eventDecorator = new EventDecorator(getSmartHome());
+        eventDecorator.registerEventProcessor(getAlarmProcessor());
+        eventDecorator.registerEventProcessor(getDoorEventProcessor());
+        eventDecorator.registerEventProcessor(getLightEventProcessor());
+        eventDecorator.registerEventProcessor(getHallDoorEventProcessor());
+        return eventDecorator;
+    }
+    
+    @Bean
+    public EventProcessor getAlarmProcessor() {
+        return new AlarmProcessor();
+    }
+    
+    @Bean
+    public EventProcessor getDoorEventProcessor() {
+        return new DoorEventProcessor();
+    }
+    @Bean
+    public EventProcessor getLightEventProcessor() {
+        return new LightEventProcessor();
+    }
+    @Bean
+    public EventProcessor getHallDoorEventProcessor() {
+        return new HallDoorEventProcessor();
+    }
 }

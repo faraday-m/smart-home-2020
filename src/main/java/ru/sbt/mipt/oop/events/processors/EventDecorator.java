@@ -19,14 +19,10 @@ public class EventDecorator implements EventHandler {
     public EventDecorator(SmartHome smartHome) {
         this.smartHome = smartHome;
         this.processors = new ArrayList<>();
-        fillProcessors();
     }
-
-    private void fillProcessors() {
-        processors.add(new DoorEventProcessor());
-        processors.add(new LightEventProcessor());
-        processors.add(new HallDoorEventProcessor());
-        processors.add(new AlarmProcessor());
+    
+    public void registerEventProcessor(EventProcessor processor) {
+        processors.add(processor);
     }
 
     public void handleEvent(CCSensorEvent event) {
