@@ -41,7 +41,11 @@ public class Room implements HomeComponent {
     public void apply(Event event, Action action) {
         Event inputEvent = event;
         if (inputEvent.getType().isRoomEvent()) {
-            if (inputEvent.getObjectId().equals(getId())) {
+            if (event.getType() == GET_HALLDOOR) {
+                if (this.getName().equals("hall")) {
+                    ((GetHallDoorEvent) event).setObjectId(doors.stream().findFirst().get().getId());
+                }
+            } else if (inputEvent.getObjectId().equals(getId())) {
                 if (inputEvent.getType() == ROOM_LIGHTS_OFF || inputEvent.getType() == ROOM_LIGHTS_ON) {
                     lights.forEach((HomeComponent c) -> c.apply(inputEvent, action));
                 }
@@ -57,10 +61,6 @@ public class Room implements HomeComponent {
             }
         } else if (event.getType() == LIGHT_OFF || event.getType() == LIGHT_ON) {
             lights.stream().filter((HomeComponent c) -> (c.getId().equals(inputEvent.getObjectId()))).forEach(action);
-        } else if (event.getType() == GET_HALLDOOR) {
-            if (this.getName().equals("hall")) {
-                ((GetHallDoorEvent) event).setObjectId(doors.stream().findFirst().get().getId());
-            }
         } else if (event.getType() == HOME_LIGHTS_OFF || event.getType() == HOME_LIGHTS_ON) {
             lights.forEach((HomeComponent c) -> c.apply(inputEvent, action));
         }

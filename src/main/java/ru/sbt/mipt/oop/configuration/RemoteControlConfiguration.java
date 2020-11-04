@@ -9,6 +9,7 @@ import ru.sbt.mipt.oop.remotecontrol.command.*;
 
 @Configuration
 public class RemoteControlConfiguration {
+  
   @Bean
   public RemoteControlRegistry getRemoteControlRegistry() {
     return new RemoteControlRegistry();

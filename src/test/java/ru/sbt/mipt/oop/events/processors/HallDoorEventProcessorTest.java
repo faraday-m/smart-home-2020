@@ -31,7 +31,7 @@ public class HallDoorEventProcessorTest {
         Room kitchen = new Room(kitchenTestLights, new LinkedHashMap<>(), "kitchen");
         Room hall = new Room(hallTestLights, testDoors, "hall");
         smartHome = new SmartHome(Arrays.asList(kitchen, hall));
-        processor = new HallDoorEventProcessor();
+        processor = new DoorEventProcessor();
     }
 
     @Test

@@ -2,7 +2,6 @@ package ru.sbt.mipt.oop.remotecontrol.command;
 
 import ru.sbt.mipt.oop.elements.ComponentId;
 import ru.sbt.mipt.oop.events.DoorEvent;
-import ru.sbt.mipt.oop.events.Event;
 import ru.sbt.mipt.oop.events.GetHallDoorEvent;
 import ru.sbt.mipt.oop.events.typedefs.EventType;
 

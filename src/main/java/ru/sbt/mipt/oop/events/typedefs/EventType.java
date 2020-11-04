@@ -19,7 +19,7 @@ public enum EventType {
         return (this.equals(HOME_LIGHTS_ON) || this.equals(HOME_LIGHTS_OFF));
     }
     public boolean isRoomEvent() {
-        return (this.equals(ROOM_LIGHTS_ON) || this.equals(ROOM_LIGHTS_OFF));
+        return (this.equals(ROOM_LIGHTS_ON) || this.equals(ROOM_LIGHTS_OFF) || this.equals(GET_HALLDOOR));
     }
 
 }
