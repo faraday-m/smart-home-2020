@@ -34,12 +34,19 @@ public class Room implements HomeComponent {
 
     @Override
     public ComponentId getId() {
-        return new StringId("Room " + name);
+        return new StringId(name);
     }
 
     @Override
     public void apply(Event event, Action action) {
         Event inputEvent = event;
+        if (inputEvent.getType().isRoomEvent()) {
+            if (inputEvent.getObjectId().equals(getId())) {
+                if (inputEvent.getType() == ROOM_LIGHTS_OFF || inputEvent.getType() == ROOM_LIGHTS_ON) {
+                    lights.forEach((HomeComponent c) -> c.apply(inputEvent, action));
+                }
+            }
+        }
         if (inputEvent.getType() == EventType.DOOR_OPEN || inputEvent.getType() == EventType.DOOR_CLOSED) {
             Collection<Door> doorsWithId = doors.stream()
                     .filter((HomeComponent c) -> (c.getId().equals(inputEvent.getObjectId())))
@@ -54,7 +61,7 @@ public class Room implements HomeComponent {
             if (this.getName().equals("hall")) {
                 ((GetHallDoorEvent) event).setObjectId(doors.stream().findFirst().get().getId());
             }
-        } else if (event.getType() == LIGHTS_OFF) {
+        } else if (event.getType() == HOME_LIGHTS_OFF || event.getType() == HOME_LIGHTS_ON) {
             lights.forEach((HomeComponent c) -> c.apply(inputEvent, action));
         }
     }

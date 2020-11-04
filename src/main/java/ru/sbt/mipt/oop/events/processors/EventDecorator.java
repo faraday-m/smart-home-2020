@@ -27,10 +27,15 @@ public class EventDecorator implements EventHandler {
 
     public void handleEvent(CCSensorEvent event) {
         Event eventAdapter = new SensorEventAdapter(event);
+        handleEvent(eventAdapter);
+    }
+    
+    
+    public void handleEvent(Event event) {
         GetAlarmStateEvent alarmStateEvent = new GetAlarmStateEvent();
         processors.forEach(p -> p.processEvent(smartHome, alarmStateEvent));
-        if (alarmStateEvent.getState() == AlarmState.DEACTIVATED || eventAdapter.getType().isAlarmEvent()) {
-            processors.forEach(p -> p.processEvent(smartHome, eventAdapter));
+        if (alarmStateEvent.getState() == AlarmState.DEACTIVATED || event.getType().isAlarmEvent()) {
+            processors.forEach(p -> p.processEvent(smartHome, event));
         } else {
             if (alarmStateEvent.getState() == AlarmState.ACTIVATED) {
                 sendSms("Trespassing!");

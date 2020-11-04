@@ -5,8 +5,7 @@ import ru.sbt.mipt.oop.elements.Light;
 import ru.sbt.mipt.oop.elements.SmartHome;
 import ru.sbt.mipt.oop.events.Event;
 
-import static ru.sbt.mipt.oop.events.typedefs.EventType.LIGHT_OFF;
-import static ru.sbt.mipt.oop.events.typedefs.EventType.LIGHT_ON;
+import static ru.sbt.mipt.oop.events.typedefs.EventType.*;
 
 public class LightEventProcessor implements EventProcessor {
     public void processEvent(SmartHome smartHome, Event event) {

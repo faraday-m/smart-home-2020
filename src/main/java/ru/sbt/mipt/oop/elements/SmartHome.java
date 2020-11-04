@@ -10,6 +10,7 @@ import java.util.Collection;
 public class SmartHome implements HomeComponent {
     private Collection<Room> rooms;
     private AlarmSystem alarmSystem;
+    public static final ComponentId id = new StringId("HOME");
 
     public SmartHome() {
         rooms = new ArrayList<>();
@@ -29,7 +30,7 @@ public class SmartHome implements HomeComponent {
 
     @Override
     public ComponentId getId() {
-        return new StringId("HOME");
+        return id;
     }
 
     public void setAlarmSystem(AlarmSystem alarmSystem) {
