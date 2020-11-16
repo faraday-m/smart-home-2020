@@ -1,5 +1,7 @@
 package ru.sbt.mipt.oop;
 
+import ru.sbt.mipt.oop.elements.Room;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -21,4 +23,5 @@ public class SmartHome {
     public Collection<Room> getRooms() {
         return rooms;
     }
+
 }

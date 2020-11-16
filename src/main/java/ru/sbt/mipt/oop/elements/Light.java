@@ -1,11 +1,10 @@
-package ru.sbt.mipt.oop;
+package ru.sbt.mipt.oop.elements;
 
-public class Light {
+public class Light extends SmartDevice {
     private boolean isOn;
-    private final String id;
 
     public Light(String id, boolean isOn) {
-        this.id = id;
+        super(id);
         this.isOn = isOn;
     }
 
@@ -13,11 +12,7 @@ public class Light {
         return isOn;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setOn(boolean on) {
+    public void setActive(boolean on) {
         isOn = on;
     }
 }

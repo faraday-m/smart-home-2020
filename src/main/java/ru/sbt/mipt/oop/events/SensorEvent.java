@@ -1,10 +1,12 @@
-package ru.sbt.mipt.oop;
+package ru.sbt.mipt.oop.events;
+
+import ru.sbt.mipt.oop.elements.DeviceId;
 
 public class SensorEvent {
     private final SensorEventType type;
-    private final String objectId;
+    private final DeviceId objectId;
 
-    public SensorEvent(SensorEventType type, String objectId) {
+    public SensorEvent(SensorEventType type, DeviceId objectId) {
         this.type = type;
         this.objectId = objectId;
     }
@@ -13,7 +15,7 @@ public class SensorEvent {
         return type;
     }
 
-    public String getObjectId() {
+    public DeviceId getObjectId() {
         return objectId;
     }
 
