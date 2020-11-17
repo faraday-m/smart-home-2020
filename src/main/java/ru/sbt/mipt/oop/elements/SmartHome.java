@@ -1,8 +1,9 @@
 package ru.sbt.mipt.oop.elements;
 
 import ru.sbt.mipt.oop.actions.Action;
+import ru.sbt.mipt.oop.actions.AlarmAction;
+import ru.sbt.mipt.oop.actions.GetAlarmAction;
 import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
-import ru.sbt.mipt.oop.events.Event;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,11 +37,12 @@ public class SmartHome implements HomeComponent {
         this.alarmSystem = alarmSystem;
     }
 
-    public void apply(Event event, Action action) {
-        if (event.getType().isAlarmEvent()) {
-            alarmSystem.apply(event, action);
+    public void apply(Action action) {
+        if (action instanceof AlarmAction || action instanceof GetAlarmAction) {
+            alarmSystem.apply(action);
+        } else {
+            rooms.forEach((Room r) -> r.apply(action));
         }
-        rooms.forEach((Room r) -> r.apply(event, action));
     }
 
 }

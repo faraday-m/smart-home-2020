@@ -26,7 +26,7 @@ public class LightEventProcessorTest {
         testLights.put(new StringId("2"), new Light("2", true));
         Room room1 = new Room(testLights, new LinkedHashMap<>(), "kitchen");
         smartHome = new SmartHome(Collections.singletonList(room1));
-        processor = new LightEventProcessor();
+        processor = new LightEventProcessor(smartHome);
     }
 
     @Test
@@ -34,7 +34,7 @@ public class LightEventProcessorTest {
         ComponentId lightId = new StringId("1");
         assertFalse(testLights.get(lightId).isOn());
         Event event = new LightEvent(LIGHT_ON, lightId);
-        processor.processEvent(smartHome, event);
+        processor.processEvent(event);
         assertTrue(testLights.get(lightId).isOn());
     }
 
@@ -43,7 +43,7 @@ public class LightEventProcessorTest {
         ComponentId lightId = new StringId("2");
         assertTrue(testLights.get(lightId).isOn());
         Event event = new LightEvent(LIGHT_OFF, lightId);
-        processor.processEvent(smartHome, event);
+        processor.processEvent(event);
         assertFalse(testLights.get(lightId).isOn());
     }
 }

@@ -1,13 +1,14 @@
 package ru.sbt.mipt.oop;
 
 import ru.sbt.mipt.oop.elements.SmartHome;
-import ru.sbt.mipt.oop.events.processors.EventDecorator;
-import ru.sbt.mipt.oop.events.processors.SensorEventGenerator;
+import ru.sbt.mipt.oop.events.processors.*;
 import ru.sbt.mipt.oop.init.HomeLoader;
 import ru.sbt.mipt.oop.init.JsonHomeLoader;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Application {
     private static HomeLoader homeLoader;
@@ -24,12 +25,21 @@ public class Application {
         application.run();
     }
 
+    private List<EventProcessor> getEventProcessors(SmartHome smartHome) {
+        List<EventProcessor> processors = new ArrayList<>();
+        processors.add(new DoorEventProcessor(smartHome));
+        processors.add(new LightEventProcessor(smartHome));
+        processors.add(new HallDoorEventProcessor(smartHome));
+        processors.add(new AlarmProcessor(smartHome));
+        return processors;
+    }
 
     private void run() {
         // считываем состояние дома из файла
         try {
             SmartHome smartHome = homeLoader.load(new FileInputStream("smart-home-1.js"));
-            Engine engine = new SmartHomeEngine(new EventDecorator(smartHome), new SensorEventGenerator(smartHome));
+            Engine engine = new SmartHomeEngine(new EventDecorator(smartHome, getEventProcessors(smartHome)),
+                    new SensorEventGenerator(smartHome));
             engine.start();
 
         } catch (IOException e) {

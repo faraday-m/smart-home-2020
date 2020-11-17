@@ -1,8 +1,7 @@
 package ru.sbt.mipt.oop.elements;
 
 import ru.sbt.mipt.oop.actions.Action;
-import ru.sbt.mipt.oop.events.Event;
-import ru.sbt.mipt.oop.events.typedefs.EventType;
+import ru.sbt.mipt.oop.actions.DoorAction;
 
 public class Door implements HomeComponent {
     private ComponentId id;
@@ -38,9 +37,7 @@ public class Door implements HomeComponent {
     }
 
     @Override
-    public void apply(Event event, Action action) {
-        if ((event.getType() == EventType.DOOR_CLOSED || event.getType() == EventType.DOOR_OPEN) && event.getObjectId().equals(this.id)) {
-            action.accept(this);
-        }
+    public void apply(Action action) {
+        action.accept(this);
     }
 }

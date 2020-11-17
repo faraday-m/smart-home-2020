@@ -24,7 +24,7 @@ public class DoorEventProcessorTest {
         testDoors.put(new StringId("2"), new Door("2", true));
         Room room1 = new Room(new LinkedHashMap<>(), testDoors, "kitchen");
         smartHome = new SmartHome(Collections.singletonList(room1));
-        processor = new DoorEventProcessor();
+        processor = new DoorEventProcessor(smartHome);
     }
 
     @Test
@@ -32,7 +32,7 @@ public class DoorEventProcessorTest {
         ComponentId doorId = new StringId("1");
         assertFalse(testDoors.get(doorId).isOpen());
         Event event = new DoorEvent(EventType.DOOR_OPEN, doorId);
-        processor.processEvent(smartHome, event);
+        processor.processEvent(event);
         assertTrue(testDoors.get(doorId).isOpen());
     }
 
@@ -41,7 +41,7 @@ public class DoorEventProcessorTest {
         ComponentId doorId = new StringId("2");
         assertTrue(testDoors.get(doorId).isOpen());
         Event event = new DoorEvent(EventType.DOOR_CLOSED, doorId);
-        processor.processEvent(smartHome, event);
+        processor.processEvent(event);
         assertFalse(testDoors.get(doorId).isOpen());
     }
 }

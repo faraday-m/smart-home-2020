@@ -2,19 +2,14 @@ package ru.sbt.mipt.oop.elements.alarm;
 
 import ru.sbt.mipt.oop.actions.Action;
 import ru.sbt.mipt.oop.elements.*;
-import ru.sbt.mipt.oop.events.Event;
 
-public class AlarmSystem implements HomeComponent  {
+public class AlarmSystem implements HomeComponent {
     private final ComponentId id;
     private int activationHashCode;
     private AlarmBehavior behavior;
 
     void setAlarmBehavior(AlarmBehavior behavior) {
             this.behavior = behavior;
-    }
-
-    public AlarmState getAlarmState() {
-        return behavior.getState();
     }
 
     boolean checkActivationCode(Object activationCode) {
@@ -53,9 +48,22 @@ public class AlarmSystem implements HomeComponent  {
     }
 
     @Override
-    public void apply(Event event, Action action) {
-        if (event.getObjectId().equals(this.id)) {
-            action.accept(this);
-        }
+    public void apply(Action action) {
+        action.accept(this);
+    }
+
+    public boolean isActivated() {
+        return (behavior instanceof AlarmActivated);
+    }
+    public boolean isDeactivated() {
+        return (behavior instanceof AlarmDeactivated);
+    }
+
+    public boolean isWarned() {
+        return (behavior instanceof AlarmWarning);
+    }
+
+    public void sendSms(String sms) {
+        System.out.println(String.format("Sending sms: %s", sms));
     }
 }

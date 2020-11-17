@@ -1,15 +1,10 @@
 package ru.sbt.mipt.oop.elements;
 
 import ru.sbt.mipt.oop.actions.*;
-import ru.sbt.mipt.oop.events.Event;
-import ru.sbt.mipt.oop.events.GetHallDoorEvent;
-import ru.sbt.mipt.oop.events.typedefs.EventType;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static ru.sbt.mipt.oop.events.typedefs.EventType.*;
 
 public class Room implements HomeComponent {
 
@@ -38,24 +33,23 @@ public class Room implements HomeComponent {
     }
 
     @Override
-    public void apply(Event event, Action action) {
-        Event inputEvent = event;
-        if (inputEvent.getType() == EventType.DOOR_OPEN || inputEvent.getType() == EventType.DOOR_CLOSED) {
+    public void apply(Action action) {
+        if (action instanceof DoorAction) {
             Collection<Door> doorsWithId = doors.stream()
-                    .filter((HomeComponent c) -> (c.getId().equals(inputEvent.getObjectId())))
+                    .filter((HomeComponent c) -> (c.getId().equals(((DoorAction) action).getId())))
                     .collect(Collectors.toList());
             boolean hasDoor = (doorsWithId.size() > 0);
             if (hasDoor) {
-                doorsWithId.forEach((Door d) -> d.apply(inputEvent, action));
+                doorsWithId.forEach((Door d) -> d.apply(action));
             }
-        } else if (event.getType() == LIGHT_OFF || event.getType() == LIGHT_ON) {
-            lights.stream().filter((HomeComponent c) -> (c.getId().equals(inputEvent.getObjectId()))).forEach(action);
-        } else if (event.getType() == GET_HALLDOOR) {
+        } else if (action instanceof LightAction) {
+            lights.stream().filter((HomeComponent c) -> (c.getId().equals(((LightAction) action).getId()))).forEach(action);
+        } else if (action instanceof GetHallDoorAction) {
             if (this.getName().equals("hall")) {
-                ((GetHallDoorEvent) event).setObjectId(doors.stream().findFirst().get().getId());
+                doors.stream().findFirst().get().apply(action);
             }
-        } else if (event.getType() == LIGHTS_OFF) {
-            lights.forEach((HomeComponent c) -> c.apply(inputEvent, action));
+        } else if (action instanceof LightsAction) {
+            lights.forEach((HomeComponent c) -> c.apply(action));
         }
     }
 }

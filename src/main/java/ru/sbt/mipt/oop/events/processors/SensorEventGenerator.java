@@ -11,7 +11,6 @@ import java.util.Random;
 import static ru.sbt.mipt.oop.events.typedefs.EventType.*;
 
 public class SensorEventGenerator implements EventGenerator {
-    public Random random = new Random();
     SmartHome smartHome;
 
     public SensorEventGenerator(SmartHome smartHome) {
@@ -21,45 +20,45 @@ public class SensorEventGenerator implements EventGenerator {
 
     public Event getNextEvent() {
         // pretend like we're getting the events from physical world, but here we're going to just generate some random events
-        if (Math.random() < 0.02) {
+        double random = Math.random();
+        if (random < 0.02) {
             System.out.println("End of generator cycle");
             return null; // null means end of event stream
         }
         EventType sensorEventType;
         String objectId;
 
-        if (Math.random() < 0.1) {
+        if (random < 0.025) {
             sensorEventType = EventType.ALARM_ACTIVATE;
             objectId = "ALARM";
             return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_1);
-        } else if (Math.random() < 0.1) {
+        } else if (random < 0.05) {
             sensorEventType = EventType.ALARM_DEACTIVATE;
             objectId = "ALARM";
             return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_1);
-        } else if (Math.random() < 0.1) {
+        } else if (random < 0.075) {
             sensorEventType = EventType.ALARM_ACTIVATE;
             objectId = "ALARM";
             return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_2);
-        } else if (Math.random() < 0.1) {
+        } else if (random < 0.1) {
             sensorEventType = EventType.ALARM_DEACTIVATE;
             objectId = "ALARM";
             return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_2);
         }
-        double rand = Math.random();
-        if (rand >= 0.5) {
-            if (rand < 0.25) {
+        if (random >= 0.55) {
+            if (random < 0.275) {
                 sensorEventType = DOOR_OPEN;
             } else {
                 sensorEventType = DOOR_CLOSED;
             }
-            objectId = String.valueOf(random.nextInt(5));
+            objectId = String.valueOf(new Random().nextInt(5));
         } else {
-            if (rand > 0.75) {
+            if (random > 0.825) {
                 sensorEventType = LIGHT_OFF;
             } else {
                 sensorEventType = LIGHT_ON;
             }
-            objectId = String.valueOf(random.nextInt(10));
+            objectId = String.valueOf(new Random().nextInt(10));
         }
 
         if (sensorEventType == DOOR_OPEN || sensorEventType == DOOR_CLOSED) {
