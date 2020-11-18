@@ -1,9 +1,6 @@
 package ru.sbt.mipt.oop.remotecontrol.command;
 
-import com.coolcompany.smarthome.events.CCSensorEvent;
-import ru.sbt.mipt.oop.elements.StringId;
-import ru.sbt.mipt.oop.events.AlarmEvent;
-import ru.sbt.mipt.oop.events.typedefs.EventType;
+import ru.sbt.mipt.oop.actions.AlarmAction;
 
 public class ActivateAlarmCommand extends AbstractRemoteControlCommand {
   private String activationCode;
@@ -14,6 +11,6 @@ public class ActivateAlarmCommand extends AbstractRemoteControlCommand {
   
   @Override
   public void execute() {
-    eventDecorator.handleEvent(new AlarmEvent(EventType.ALARM_ACTIVATE, new StringId("ALARM"), activationCode));
+    smartHome.apply(new AlarmAction(AlarmAction.AlarmState.ACTIVATE, activationCode));
   }
 }

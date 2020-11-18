@@ -1,6 +1,7 @@
 package ru.sbt.mipt.oop.elements.alarm;
 
 public class AlarmActivated implements AlarmBehavior {
+
     private final AlarmSystem system;
 
     AlarmActivated(AlarmSystem system) {
@@ -25,11 +26,7 @@ public class AlarmActivated implements AlarmBehavior {
     @Override
     public void warn() {
         System.out.println("Turning warning mode on!");
+        system.sendNotification("Trespassing!");
         system.setAlarmBehavior(new AlarmWarning(system));
-    }
-
-    @Override
-    public AlarmState getState() {
-        return AlarmState.ACTIVATED;
     }
 }

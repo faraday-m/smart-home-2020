@@ -1,28 +1,37 @@
 package ru.sbt.mipt.oop.configuration;
 
 import com.coolcompany.smarthome.events.SensorEventsManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.sbt.mipt.oop.commands.Notifier;
+import ru.sbt.mipt.oop.commands.SMSNotifier;
 import ru.sbt.mipt.oop.elements.SmartHome;
+import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
 import ru.sbt.mipt.oop.events.processors.*;
 import ru.sbt.mipt.oop.init.JsonHomeLoader;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.util.List;
 
 @Configuration
 public class EventManagerConfiguration {
+    @Autowired
+    List<EventProcessor> processors;
+
     @Bean
-    public SensorEventsManager getEventManager() {
+    public SensorEventsManager eventManager() {
         SensorEventsManager manager = new SensorEventsManager();
-        manager.registerEventHandler(getEventDecorator());
+        manager.registerEventHandler(eventDecorator());
         return manager;
     }
 
     @Bean
-    public SmartHome getSmartHome(){
+    public SmartHome smartHome(){
         try {
-            return new JsonHomeLoader().load(new FileInputStream("smart-home-1.js"));
+            SmartHome home = new JsonHomeLoader().load(new FileInputStream("smart-home-1.js"));
+            home.setAlarmSystem(alarmSystem());
+            return home;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -30,39 +39,34 @@ public class EventManagerConfiguration {
     }
     
     @Bean
-    public EventDecorator getEventDecorator() {
-        EventDecorator eventDecorator = new EventDecorator(getSmartHome());
-        eventDecorator.registerEventProcessor(getAlarmProcessor());
-        eventDecorator.registerEventProcessor(getDoorEventProcessor());
-        eventDecorator.registerEventProcessor(getLightEventProcessor());
-        eventDecorator.registerEventProcessor(getHomeEventProcessor());
-        eventDecorator.registerEventProcessor(getRoomEventProcessor());
-        return eventDecorator;
+    public EventDecorator eventDecorator() {
+        return new EventDecorator(smartHome(), alarmSystem(), processors);
+    }
+
+    @Bean
+    public AlarmSystem alarmSystem() {
+        return new AlarmSystem(smsNotifier());
+    }
+
+    @Bean
+    public Notifier smsNotifier() {
+        return new SMSNotifier();
+    }
+
+    @Bean
+    public EventProcessor alarmProcessor() {
+        return new AlarmProcessor(smartHome());
     }
     
     @Bean
-    public EventProcessor getAlarmProcessor() {
-        return new AlarmProcessor();
+    public EventProcessor doorEventProcessor() {
+        return new DoorEventProcessor(smartHome());
     }
     
     @Bean
-    public EventProcessor getDoorEventProcessor() {
-        return new DoorEventProcessor();
+    public EventProcessor lightEventProcessor() {
+        return new LightEventProcessor(smartHome());
     }
-    
-    @Bean
-    public EventProcessor getLightEventProcessor() {
-        return new LightEventProcessor();
-    }
-    
-    @Bean
-    public EventProcessor getRoomEventProcessor() {
-        return new HomeEventProcessor();
-    }
-    
-    @Bean
-    public EventProcessor getHomeEventProcessor() {
-        return new RoomEventProcessor();
-    }
+
     
 }

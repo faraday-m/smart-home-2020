@@ -4,5 +4,4 @@ public interface AlarmBehavior {
     void activate(Object activationCode);
     void deactivate(Object providedCode);
     void warn();
-    AlarmState getState();
 }

@@ -10,7 +10,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import rc.RemoteControl;
 import ru.sbt.mipt.oop.configuration.RemoteControlConfiguration;
 import ru.sbt.mipt.oop.elements.*;
-import ru.sbt.mipt.oop.elements.alarm.AlarmState;
 import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
 import ru.sbt.mipt.oop.events.processors.EventDecorator;
 
@@ -39,20 +38,20 @@ public class RemoteControlImplTest {
   
   @Test
   public void AlarmActivatedTest() {
-      assertTrue(alarm.getAlarmState().equals(AlarmState.DEACTIVATED));
+      assertTrue(alarm.isDeactivated());
       rc.onButtonPressed("A", "rc");
-      assertTrue(alarm.getAlarmState().equals(AlarmState.ACTIVATED));
+      assertTrue(alarm.isActivated());
   }
   
   
   @Test
   public void AlarmWarningTest() {
     AlarmSystem alarm = context.getBean(AlarmSystem.class);
-    assertTrue(alarm.getAlarmState().equals(AlarmState.DEACTIVATED));
+    assertTrue(alarm.isDeactivated());
     alarm.activate("activationCode");
-    assertTrue(alarm.getAlarmState().equals(AlarmState.ACTIVATED));
+    assertTrue(alarm.isActivated());
     rc.onButtonPressed("B", "rc");
-    assertTrue(alarm.getAlarmState().equals(AlarmState.WARNING));
+    assertTrue(alarm.isWarned());
   }
   
   

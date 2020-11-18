@@ -2,7 +2,9 @@ package ru.sbt.mipt.oop.events.processors;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.sbt.mipt.oop.commands.SMSNotifier;
 import ru.sbt.mipt.oop.elements.*;
+import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
 import ru.sbt.mipt.oop.events.DoorEvent;
 import ru.sbt.mipt.oop.events.Event;
 import ru.sbt.mipt.oop.events.typedefs.EventType;
@@ -10,7 +12,6 @@ import ru.sbt.mipt.oop.events.typedefs.EventType;
 import java.util.*;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 public class HallDoorEventProcessorTest {
     private EventProcessor processor;
@@ -30,8 +31,8 @@ public class HallDoorEventProcessorTest {
         testDoors.put(new StringId("1"), new Door("1", true));
         Room kitchen = new Room(kitchenTestLights, new LinkedHashMap<>(), "kitchen");
         Room hall = new Room(hallTestLights, testDoors, "hall");
-        smartHome = new SmartHome(Arrays.asList(kitchen, hall));
-        processor = new DoorEventProcessor();
+        smartHome = new SmartHome(Arrays.asList(kitchen, hall), new AlarmSystem(new SMSNotifier()));
+        processor = new DoorEventProcessor(smartHome);
     }
 
     @Test
@@ -39,7 +40,7 @@ public class HallDoorEventProcessorTest {
         assertTrue(kitchenTestLights.get(new StringId("2")).isOn());
         assertTrue(hallTestLights.get(new StringId("3")).isOn());
         Event event = new DoorEvent(EventType.DOOR_CLOSED, new StringId("1"));
-        processor.processEvent(smartHome, event);
+        processor.processEvent(event);
         assertFalse(kitchenTestLights.get(new StringId("2")).isOn());
         assertFalse(hallTestLights.get(new StringId("3")).isOn());
     }

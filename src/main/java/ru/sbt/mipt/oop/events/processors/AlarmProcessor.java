@@ -1,28 +1,41 @@
 package ru.sbt.mipt.oop.events.processors;
 
-import ru.sbt.mipt.oop.elements.HomeComponent;
+import ru.sbt.mipt.oop.actions.Action;
+import ru.sbt.mipt.oop.actions.AlarmAction;
 import ru.sbt.mipt.oop.elements.SmartHome;
-import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
 import ru.sbt.mipt.oop.events.AlarmEvent;
 import ru.sbt.mipt.oop.events.Event;
-import ru.sbt.mipt.oop.events.GetAlarmStateEvent;
 import ru.sbt.mipt.oop.events.typedefs.EventType;
 
+import static ru.sbt.mipt.oop.events.typedefs.EventType.*;
+
 public class AlarmProcessor implements EventProcessor {
+    private SmartHome smartHome;
+
+    public AlarmProcessor(SmartHome smartHome) {
+        this.smartHome = smartHome;
+    }
+
+    public static boolean isAlarmEvent(EventType type) {
+        return (type.equals(ALARM_ACTIVATE) || type.equals(ALARM_DEACTIVATE) || type.equals(ALARM_WARNING) || type.equals(GET_ALARM_STATE));
+    }
+
+    private Action getAlarmAction(Event event) {
+        switch(event.getType()) {
+            case ALARM_ACTIVATE:
+                return new AlarmAction(AlarmAction.AlarmState.ACTIVATE, ((AlarmEvent) event).getActivationCode());
+            case ALARM_DEACTIVATE:
+                return new AlarmAction(AlarmAction.AlarmState.DEACTIVATE, ((AlarmEvent) event).getActivationCode());
+            case ALARM_WARNING:
+                return new AlarmAction(AlarmAction.AlarmState.WARN, null);
+        }
+        return null;
+    }
+
     @Override
-    public void processEvent(SmartHome smartHome, Event event) {
-        if (event.getType().isAlarmEvent()) {
-            smartHome.apply(event, ((HomeComponent system) -> {
-                if (event.getType() == EventType.ALARM_ACTIVATE) {
-                    ((AlarmSystem) system).activate(((AlarmEvent) event).getActivationCode());
-                } else if (event.getType() == EventType.ALARM_DEACTIVATE) {
-                    ((AlarmSystem) system).deactivate(((AlarmEvent) event).getActivationCode());
-                } else if (event.getType() == EventType.ALARM_WARNING) {
-                    ((AlarmSystem) system).warn();
-                } else if (event.getType() == EventType.GET_ALARM_STATE) {
-                    ((GetAlarmStateEvent)event).setState(((AlarmSystem) system).getAlarmState());
-                }
-            }));
+    public void processEvent(Event event) {
+        if (isAlarmEvent(event.getType())) {
+            smartHome.apply(getAlarmAction(event));
         }
     }
 }

@@ -3,6 +3,7 @@ package ru.sbt.mipt.oop.events;
 import com.coolcompany.smarthome.events.CCSensorEvent;
 import ru.sbt.mipt.oop.elements.ComponentId;
 import ru.sbt.mipt.oop.elements.StringId;
+import ru.sbt.mipt.oop.events.processors.AlarmProcessor;
 import ru.sbt.mipt.oop.events.typedefs.EventType;
 
 public class SensorEventAdapter extends AlarmEvent {
@@ -40,7 +41,7 @@ public class SensorEventAdapter extends AlarmEvent {
 
     @Override
     public ComponentId getObjectId() {
-        if (!getType().isAlarmEvent()) {
+        if (!AlarmProcessor.isAlarmEvent(getType())) {
             return new StringId(sensorEvent.getObjectId());
         } else {
             return new StringId("ALARM");

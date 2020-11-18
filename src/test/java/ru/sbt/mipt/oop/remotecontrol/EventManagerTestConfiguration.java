@@ -1,29 +1,33 @@
 package ru.sbt.mipt.oop.remotecontrol;
 
 import com.coolcompany.smarthome.events.SensorEventsManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.sbt.mipt.oop.commands.SMSNotifier;
 import ru.sbt.mipt.oop.elements.*;
 import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
 import ru.sbt.mipt.oop.events.processors.*;
-import ru.sbt.mipt.oop.init.JsonHomeLoader;
 
-import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
 public class EventManagerTestConfiguration {
+    @Autowired
+    List<EventProcessor> processors;
+
     @Bean
-    public SensorEventsManager getEventManager() {
+    public SensorEventsManager eventManager() {
         SensorEventsManager manager = new SensorEventsManager();
-        manager.registerEventHandler(getEventDecorator());
+        manager.registerEventHandler(eventDecorator());
         return manager;
     }
     
     @Bean(name="kitchenLights")
-    public Map<ComponentId, Light> getKitchenLights() {
+    public Map<ComponentId, Light> kitchenLights() {
         Map<ComponentId, Light> kitchenTestLights = new LinkedHashMap<>();
         kitchenTestLights.put(new StringId("1"), new Light("1", false));
         kitchenTestLights.put(new StringId("2"), new Light("2", true));
@@ -31,66 +35,54 @@ public class EventManagerTestConfiguration {
     }
     
     @Bean(name="hallLights")
-    public Map<ComponentId, Light> getHallLights() {
+    public Map<ComponentId, Light> hallLights() {
         Map<ComponentId, Light> hallTestLights = new LinkedHashMap<>();
         hallTestLights.put(new StringId("3"), new Light("3", true));
         return hallTestLights;
     }
     
     @Bean(name="hallDoors")
-    public Map<ComponentId, Door> getHallDoors() {
+    public Map<ComponentId, Door> hallDoors() {
         Map<ComponentId, Door> testDoors = new LinkedHashMap<>();
         testDoors.put(new StringId("1"), new Door("1", true));
         return testDoors;
     }
     @Bean
-    public SmartHome getSmartHome(){
-        Room kitchen = new Room(getKitchenLights(), new LinkedHashMap<>(), "kitchen");
-        Room hall = new Room(getHallLights(), getHallDoors(), "hall");
+    public SmartHome smartHome(){
+        Room kitchen = new Room(kitchenLights(), new LinkedHashMap<>(), "kitchen");
+        Room hall = new Room(hallLights(), hallDoors(), "hall");
         SmartHome smartHome = new SmartHome(Arrays.asList(kitchen, hall));
-        smartHome.setAlarmSystem(getAlarmSystem());
+        smartHome.setAlarmSystem(alarmSystem());
         return smartHome;
     }
     
     @Bean
-    public AlarmSystem getAlarmSystem() {
-        return new AlarmSystem();
+    public AlarmSystem alarmSystem() {
+        return new AlarmSystem(smsNotifier());
     }
-    
-    
+
     @Bean
-    public EventDecorator getEventDecorator() {
-        EventDecorator eventDecorator = new EventDecorator(getSmartHome());
-        eventDecorator.registerEventProcessor(getAlarmProcessor());
-        eventDecorator.registerEventProcessor(getDoorEventProcessor());
-        eventDecorator.registerEventProcessor(getLightEventProcessor());
-        eventDecorator.registerEventProcessor(getHomeEventProcessor());
-        eventDecorator.registerEventProcessor(getRoomEventProcessor());
-        return eventDecorator;
+    public SMSNotifier smsNotifier() {
+        return new SMSNotifier();
     }
     
     @Bean
-    public EventProcessor getAlarmProcessor() {
-        return new AlarmProcessor();
+    public EventDecorator eventDecorator() {
+        return new EventDecorator(smartHome(), alarmSystem(), processors);
     }
     
     @Bean
-    public EventProcessor getDoorEventProcessor() {
-        return new DoorEventProcessor();
+    public EventProcessor alarmProcessor() {
+        return new AlarmProcessor(smartHome());
     }
     
     @Bean
-    public EventProcessor getLightEventProcessor() {
-        return new LightEventProcessor();
+    public EventProcessor doorEventProcessor() {
+        return new DoorEventProcessor(smartHome());
     }
     
     @Bean
-    public EventProcessor getRoomEventProcessor() {
-        return new HomeEventProcessor();
-    }
-    
-    @Bean
-    public EventProcessor getHomeEventProcessor() {
-        return new RoomEventProcessor();
+    public EventProcessor lightEventProcessor() {
+        return new LightEventProcessor(smartHome());
     }
 }

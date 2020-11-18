@@ -1,9 +1,6 @@
 package ru.sbt.mipt.oop.elements;
 
 import ru.sbt.mipt.oop.actions.Action;
-import ru.sbt.mipt.oop.events.Event;
-
-import static ru.sbt.mipt.oop.events.typedefs.EventType.*;
 
 public class Light implements HomeComponent {
     private ComponentId id;
@@ -24,21 +21,12 @@ public class Light implements HomeComponent {
     }
 
     @Override
-    public ElementType getType() {
-        return HomeElementType.LIGHT;
-    }
-
-    @Override
     public ComponentId getId() {
         return id;
     }
 
     @Override
-    public void apply(Event event, Action action) {
-        if (event.getObjectId().equals(id)) {
-            action.accept(this);
-        } else if (event.getType().isHomeEvent() || event.getType().isRoomEvent()) {
-            action.accept(this);
-        }
+    public void apply(Action action) {
+        action.accept(this);
     }
 }

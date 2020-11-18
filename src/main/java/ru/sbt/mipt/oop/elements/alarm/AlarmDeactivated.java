@@ -24,9 +24,4 @@ public class AlarmDeactivated implements AlarmBehavior {
         System.out.println("Turning warning mode on!");
         system.setAlarmBehavior(new AlarmWarning(system));
     }
-
-    @Override
-    public AlarmState getState() {
-        return AlarmState.DEACTIVATED;
-    }
 }

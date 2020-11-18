@@ -4,5 +4,5 @@ import ru.sbt.mipt.oop.actions.Action;
 import ru.sbt.mipt.oop.events.Event;
 
 public interface Actionable {
-    void apply(Event event, Action action);
+    void apply(Action action);
 }
