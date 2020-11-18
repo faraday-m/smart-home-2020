@@ -1,98 +1,55 @@
 package ru.sbt.mipt.oop.elements;
 
-import java.util.Arrays;
+import ru.sbt.mipt.oop.actions.*;
+
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-public class Room {
-    public static class RoomBuilder {
-        private String name;
-        private Collection<Light> lights = new LinkedList<>();
-        private Collection<Door> doors = new LinkedList<>();
-
-        public RoomBuilder withName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public RoomBuilder withLights(Light... lights) {
-            this.withLights(Arrays.asList(lights));
-            return this;
-        }
-
-        public RoomBuilder withLights(Collection<Light> lights) {
-            this.lights.addAll(lights);
-            return this;
-        }
-
-        public RoomBuilder withDoors(Door... doors) {
-            this.withDoors(Arrays.asList(doors));
-            return this;
-        }
-
-        public RoomBuilder withDoors(Collection<Door> doors) {
-            this.doors.addAll(doors);
-            return this;
-        }
-
-        public Room build() {
-            return new Room(this);
-        }
-    }
+public class Room implements HomeComponent {
 
     private Collection<Light> lights;
     private Collection<Door> doors;
     private String name;
 
-    public Room(Collection<Light> lights, Collection<Door> doors, String name) {
-        this.lights = lights;
-        this.doors = doors;
+    public Room(Map<ComponentId, Light> lights, Map<ComponentId, Door> doors, String name) {
+        this.lights = lights.values();
+        this.doors = doors.values();
         this.name = name;
     }
 
-    public Room(RoomBuilder builder) {
-        this.lights = builder.lights;
-        this.doors = builder.doors;
-        this.name = builder.name;
-    }
-
-    public Door getDoor(DeviceId id) {
-        return doors.stream().filter((Door d) -> id.equals(d.getId())).findFirst().orElse(null);
-    }
-
-    public Light getLight(DeviceId id) {
-        return lights.stream().filter((Light l) -> id.equals(l.getId())).findFirst().orElse(null);
-    }
-
-    public Collection<Light> getLights() {
-        return lights;
-    }
-
-    public Collection<Door> getDoors() {
-        return doors;
-    }
-
-    public void changeDoor(DeviceId id, boolean isOpen) {
-        if (getDoor(id) != null) {
-            getDoor(id).setActive(isOpen);
-            System.out.println("Door " + id + " in room " + this.name + (isOpen ? " was opened." : " was closed."));
-        } else {
-            System.out.println("No door with id " + id);
-        }
-    }
-
-    public void changeLight(DeviceId id, boolean isOn) {
-        if (getLight(id) != null) {
-            getLight(id).setActive(isOn);
-            System.out.println("Light " + id + " in room " + this.getName() + (isOn ? " was turned on." : " was turned off."));
-        } else {
-            System.out.println("No light with id " + id);
-        }
-    }
-
-    public String getName() {
+    private String getName() {
         return name;
     }
 
+    @Override
+    public ElementType getType() {
+        return HomeElementType.ROOM;
+    }
 
+    @Override
+    public ComponentId getId() {
+        return new StringId("Room " + name);
+    }
+
+    @Override
+    public void apply(Action action) {
+        if (action instanceof DoorAction) {
+            Collection<Door> doorsWithId = doors.stream()
+                    .filter((HomeComponent c) -> (c.getId().equals(((DoorAction) action).getId())))
+                    .collect(Collectors.toList());
+            boolean hasDoor = (doorsWithId.size() > 0);
+            if (hasDoor) {
+                doorsWithId.forEach((Door d) -> d.apply(action));
+            }
+        } else if (action instanceof LightAction) {
+            lights.stream().filter((HomeComponent c) -> (c.getId().equals(((LightAction) action).getId()))).forEach(action);
+        } else if (action instanceof GetHallDoorAction) {
+            if (this.getName().equals("hall")) {
+                doors.stream().findFirst().get().apply(action);
+            }
+        } else if (action instanceof LightsAction) {
+            lights.forEach((HomeComponent c) -> c.apply(action));
+        }
+    }
 }

@@ -3,28 +3,34 @@ package ru.sbt.mipt.oop.events;
 import ru.sbt.mipt.oop.elements.ComponentId;
 import ru.sbt.mipt.oop.events.typedefs.EventType;
 
-public abstract class SensorEvent implements Event {
+public class AlarmEvent implements Event {
     private final EventType type;
     private final ComponentId objectId;
+    private final String activationCode;
 
-    public SensorEvent(EventType type, ComponentId objectId) {
+    public AlarmEvent(EventType type, ComponentId id, String activationCode) {
         this.type = type;
-        this.objectId = objectId;
+        this.objectId = id;
+        this.activationCode = activationCode;
     }
-
+    @Override
     public EventType getType() {
         return type;
     }
 
+    @Override
     public ComponentId getObjectId() {
         return objectId;
     }
 
+    public String getActivationCode() { return activationCode; }
+
     @Override
     public String toString() {
-        return "SensorEvent{" +
+        return "AlarmEvent{" +
                 "type=" + type +
-                ", objectId='" + objectId + '\'' +
+                ", objectId='" + objectId +
+                ", activationCode='" + activationCode + '\'' +
                 '}';
     }
 }

@@ -1,36 +1,27 @@
 package ru.sbt.mipt.oop;
 
+import ru.sbt.mipt.oop.elements.SmartHome;
 import ru.sbt.mipt.oop.events.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import ru.sbt.mipt.oop.events.processors.*;
 
 public class SmartHomeEngine implements Engine {
-    private final List<EventProcessor> processors;
+    private final EventDecorator eventDecorator;
     private final SensorEventGenerator sensorEventGenerator;
-    SmartHome smartHome;
 
-    private void fillProcessors() {
-        processors.add(new DoorEventProcessor());
-        processors.add(new LightEventProcessor());
-        processors.add(new HallDoorEventProcessor());
-    }
-
-    public SmartHomeEngine(SmartHome smartHome, SensorEventGenerator sensorEventGenerator) {
-        this.smartHome = smartHome;
-        this.processors = new ArrayList<>();
+    public SmartHomeEngine(EventDecorator eventDecorator, SensorEventGenerator sensorEventGenerator) {
+        this.eventDecorator = eventDecorator;
         this.sensorEventGenerator = sensorEventGenerator;
-        fillProcessors();
     }
+
 
     public void start() {
         // начинаем цикл обработки событий
-        for (SensorEvent event = sensorEventGenerator.getNextSensorEvent();
+        for (Event event = sensorEventGenerator.getNextEvent();
              event != null;
-             event = sensorEventGenerator.getNextSensorEvent()) {
-            SensorEvent currentEvent = event;
+             event = sensorEventGenerator.getNextEvent()) {
+            Event currentEvent = event;
             System.out.println("Got event: " + currentEvent);
-            processors.forEach(p -> p.processEvent(smartHome, currentEvent));
+            eventDecorator.processEvent(event);
         }
     }
 }

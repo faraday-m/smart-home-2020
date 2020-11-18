@@ -1,6 +1,8 @@
 package ru.sbt.mipt.oop;
 
 import ru.sbt.mipt.oop.elements.Room;
+import ru.sbt.mipt.oop.elements.RoomFactory;
+import ru.sbt.mipt.oop.elements.SmartHome;
 import ru.sbt.mipt.oop.init.HomeLoader;
 import ru.sbt.mipt.oop.init.JsonHomeLoader;
 
@@ -9,7 +11,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class HomeBuilder {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Room kitchen = RoomFactory.getKitchen();
         Room bathroom = RoomFactory.getBathroom();
         Room bedroom = RoomFactory.getBedroom();

@@ -1,10 +1,15 @@
 package ru.sbt.mipt.oop.elements;
 
-public class Light extends SmartDevice {
+import ru.sbt.mipt.oop.actions.Action;
+
+import static ru.sbt.mipt.oop.events.typedefs.EventType.*;
+
+public class Light implements HomeComponent {
+    private ComponentId id;
     private boolean isOn;
 
     public Light(String id, boolean isOn) {
-        super(id);
+        this.id = new StringId(id);
         this.isOn = isOn;
     }
 
@@ -12,7 +17,23 @@ public class Light extends SmartDevice {
         return isOn;
     }
 
-    public void setActive(boolean on) {
+    public void setOn(boolean on) {
         isOn = on;
+        System.out.println("Light " + id + " was turned " + (on ? "on" : "off"));
+    }
+
+    @Override
+    public ElementType getType() {
+        return HomeElementType.LIGHT;
+    }
+
+    @Override
+    public ComponentId getId() {
+        return id;
+    }
+
+    @Override
+    public void apply(Action action) {
+        action.accept(this);
     }
 }

@@ -1,6 +1,6 @@
 package ru.sbt.mipt.oop.elements;
 
-public interface DeviceId {
+public interface ComponentId {
     @Override
     String toString();
 

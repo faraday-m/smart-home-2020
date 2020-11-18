@@ -1,0 +1,6 @@
+package ru.sbt.mipt.oop.events.typedefs;
+
+public enum EventType {
+    LIGHT_ON, LIGHT_OFF, DOOR_OPEN, DOOR_CLOSED, LIGHTS_OFF, GET_HALLDOOR,
+    ALARM_ACTIVATE, ALARM_DEACTIVATE, ALARM_WARNING, GET_ALARM_STATE;
+}
