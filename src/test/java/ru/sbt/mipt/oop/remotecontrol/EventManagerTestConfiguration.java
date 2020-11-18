@@ -4,6 +4,7 @@ import com.coolcompany.smarthome.events.SensorEventsManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.sbt.mipt.oop.commands.Notifier;
 import ru.sbt.mipt.oop.commands.SMSNotifier;
 import ru.sbt.mipt.oop.elements.*;
 import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
@@ -48,7 +49,7 @@ public class EventManagerTestConfiguration {
         return testDoors;
     }
     @Bean
-    public SmartHome smartHome(){
+    public SmartHome smartHome() {
         Room kitchen = new Room(kitchenLights(), new LinkedHashMap<>(), "kitchen");
         Room hall = new Room(hallLights(), hallDoors(), "hall");
         SmartHome smartHome = new SmartHome(Arrays.asList(kitchen, hall));
@@ -62,7 +63,7 @@ public class EventManagerTestConfiguration {
     }
 
     @Bean
-    public SMSNotifier smsNotifier() {
+    public Notifier smsNotifier() {
         return new SMSNotifier();
     }
     

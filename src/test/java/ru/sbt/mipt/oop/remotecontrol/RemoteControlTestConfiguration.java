@@ -1,4 +1,4 @@
-package ru.sbt.mipt.oop.configuration;
+package ru.sbt.mipt.oop.remotecontrol;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -6,13 +6,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import rc.RemoteControl;
 import rc.RemoteControlRegistry;
+import ru.sbt.mipt.oop.configuration.EventManagerConfiguration;
 import ru.sbt.mipt.oop.elements.SmartHome;
-import ru.sbt.mipt.oop.remotecontrol.RemoteControlBuilder;
 import ru.sbt.mipt.oop.remotecontrol.command.*;
 
 @Configuration
-@Import({EventManagerConfiguration.class})
-public class RemoteControlConfiguration {
+@Import({EventManagerTestConfiguration.class})
+public class RemoteControlTestConfiguration {
   @Autowired
   private SmartHome smartHome;
 

@@ -8,21 +8,16 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import rc.RemoteControl;
-import ru.sbt.mipt.oop.configuration.RemoteControlConfiguration;
 import ru.sbt.mipt.oop.elements.*;
 import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
-import ru.sbt.mipt.oop.events.processors.EventDecorator;
 
 import java.util.Map;
 
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes={EventManagerTestConfiguration.class, RemoteControlConfiguration.class})
+@ContextConfiguration(classes={EventManagerTestConfiguration.class, RemoteControlTestConfiguration.class})
 public class RemoteControlImplTest {
-  
-  @Autowired
-  private EventDecorator eventDecorator;
   @Autowired
   private RemoteControl rc;
   @Autowired
