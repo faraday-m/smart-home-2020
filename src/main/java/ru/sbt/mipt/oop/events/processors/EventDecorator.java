@@ -11,20 +11,11 @@ import ru.sbt.mipt.oop.events.*;
 
 import java.util.List;
 
-public class EventDecorator implements EventHandler {
+public class EventDecorator {
     private List<EventProcessor> processors;
 
     public EventDecorator(List<EventProcessor> eventProcessors) {
         this.processors = eventProcessors;
-    }
-
-    public void registerEventProcessor(EventProcessor processor) {
-        processors.add(processor);
-    }
-
-    public void handleEvent(CCSensorEvent event) {
-        Event eventAdapter = new SensorEventAdapter(event);
-        processEvent(eventAdapter);
     }
 
     public void processEvent(Event event) {

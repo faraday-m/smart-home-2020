@@ -1,5 +1,6 @@
 package ru.sbt.mipt.oop.remotecontrol;
 
+import com.coolcompany.smarthome.events.EventHandler;
 import com.coolcompany.smarthome.events.SensorEventsManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,10 +26,20 @@ public class EventManagerTestConfiguration {
     @Bean
     public SensorEventsManager eventManager() {
         SensorEventsManager manager = new SensorEventsManager();
-        manager.registerEventHandler(eventDecorator());
+        manager.registerEventHandler(eventHandler());
         return manager;
     }
+
+    @Bean
+    public EventHandler eventHandler() {
+        return new EventHandlerAdapter(eventDecorator());
+    }
     
+    @Bean
+    public EventDecorator eventDecorator() {
+        return new EventDecorator(processors);
+    }
+
     @Bean(name="kitchenLights")
     public Map<ComponentId, Light> kitchenLights() {
         Map<ComponentId, Light> kitchenTestLights = new LinkedHashMap<>();
@@ -72,11 +83,6 @@ public class EventManagerTestConfiguration {
     @Bean
     public ActionHandler actionHandler() {
         return new ActionDecorator(smartHome(), alarmSystem());
-    }
-
-    @Bean
-    public EventDecorator eventDecorator() {
-        return new EventDecorator(processors);
     }
     
     @Bean

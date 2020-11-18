@@ -11,6 +11,9 @@ import ru.sbt.mipt.oop.configuration.EventManagerConfiguration;
 import ru.sbt.mipt.oop.elements.SmartHome;
 import ru.sbt.mipt.oop.remotecontrol.command.*;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @Configuration
 @Import({EventManagerTestConfiguration.class})
 public class RemoteControlTestConfiguration {
@@ -18,51 +21,51 @@ public class RemoteControlTestConfiguration {
   private ActionHandler actionHandler;
 
   @Bean
-  public RemoteControlRegistry getRemoteControlRegistry() {
+  public RemoteControlRegistry remoteControlRegistry() {
     return new RemoteControlRegistry();
   }
 
   @Bean
-  public RemoteControlCommand getActivateAlarm() {
+  public RemoteControlCommand activateAlarm() {
     return new ActivateAlarmCommand(actionHandler, "activationCode");
   }
 
   @Bean
-  public RemoteControlCommand getCloseHallDoor() {
+  public RemoteControlCommand closeHallDoor() {
     return new CloseHallDoorCommand(actionHandler);
   }
 
   @Bean
-  public RemoteControlCommand getHallLightsOn() {
+  public RemoteControlCommand hallLightsOn() {
     return new HallLightsOnCommand(actionHandler);
   }
 
   @Bean
-  public RemoteControlCommand getHomeLightsOn() {
+  public RemoteControlCommand homeLightsOn() {
     return new HomeLightCommand(actionHandler,true);
   }
 
   @Bean
-  public RemoteControlCommand getHomeLightsOff() {
+  public RemoteControlCommand homeLightsOff() {
     return new HomeLightCommand(actionHandler,false);
   }
 
   @Bean
-  public RemoteControlCommand getWarnAlarm() {
+  public RemoteControlCommand warnAlarm() {
     return new WarnAlarmCommand(actionHandler);
   }
 
   @Bean
-  public RemoteControl getRemoteControl() {
-    RemoteControl rc = new RemoteControlBuilder("rc")
-        .setCommand("A", getActivateAlarm())
-        .setCommand("B", getWarnAlarm())
-        .setCommand("C", getCloseHallDoor())
-        .setCommand("D", getHallLightsOn())
-        .setCommand("0", getHomeLightsOff())
-        .setCommand("1", getHomeLightsOn())
-        .build();
-    getRemoteControlRegistry().registerRemoteControl(rc, "rc");
-    return rc;
+  public RemoteControl remoteControl() {
+      Map<String, RemoteControlCommand> commands = new LinkedHashMap<>();
+      commands.put("A", activateAlarm());
+      commands.put("B", warnAlarm());
+      commands.put("C", closeHallDoor());
+      commands.put("D", hallLightsOn());
+      commands.put("0", homeLightsOff());
+      commands.put("1", homeLightsOn());
+      RemoteControl rc = new RemoteControlImpl("rc", commands);
+      remoteControlRegistry().registerRemoteControl(rc, "rc");
+      return rc;
   }
 }

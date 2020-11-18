@@ -1,5 +1,6 @@
 package ru.sbt.mipt.oop.configuration;
 
+import com.coolcompany.smarthome.events.EventHandler;
 import com.coolcompany.smarthome.events.SensorEventsManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +25,7 @@ public class EventManagerConfiguration {
     @Bean
     public SensorEventsManager eventManager() {
         SensorEventsManager manager = new SensorEventsManager();
-        manager.registerEventHandler(eventDecorator());
+        manager.registerEventHandler(eventHandler());
         return manager;
     }
 
@@ -43,6 +44,11 @@ public class EventManagerConfiguration {
     @Bean
     public EventDecorator eventDecorator() {
         return new EventDecorator(processors);
+    }
+
+    @Bean
+    public EventHandler eventHandler() {
+        return new EventHandlerAdapter(eventDecorator());
     }
 
     @Bean

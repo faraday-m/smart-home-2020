@@ -7,22 +7,21 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class RemoteControlImpl implements RemoteControl {
-  private String rcId;
-  private Map<String, RemoteControlCommand> commands;
+  private final String rcId;
+  private final Map<String, RemoteControlCommand> commands;
   
-  public RemoteControlImpl(String rcId) {
+  public RemoteControlImpl(String rcId, Map<String, RemoteControlCommand> commands) {
     this.rcId = rcId;
-    this.commands = new LinkedHashMap<>();
+    this.commands = commands;
   }
   
   @Override
   public void onButtonPressed(String buttonCode, String rcId) {
     if (this.rcId.equals(rcId)) {
-      commands.get(buttonCode).execute();
+      RemoteControlCommand command = commands.get(buttonCode);
+      if (command != null) {
+        command.execute();
+      }
     }
-  }
-  
-  public void setCommand(String buttonCode, RemoteControlCommand command) {
-    this.commands.put(buttonCode, command);
   }
 }
