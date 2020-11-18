@@ -1,5 +1,6 @@
 package ru.sbt.mipt.oop.events.processors;
 
+import ru.sbt.mipt.oop.actions.ActionHandler;
 import ru.sbt.mipt.oop.actions.LightAction;
 import ru.sbt.mipt.oop.elements.HomeComponent;
 import ru.sbt.mipt.oop.elements.Light;
@@ -11,10 +12,10 @@ import ru.sbt.mipt.oop.events.typedefs.EventType;
 import static ru.sbt.mipt.oop.events.typedefs.EventType.*;
 
 public class LightEventProcessor implements EventProcessor {
-    private SmartHome smartHome;
+    private ActionHandler actionHandler;
 
-    public LightEventProcessor(SmartHome smartHome) {
-        this.smartHome = smartHome;
+    public LightEventProcessor(ActionHandler actionHandler) {
+        this.actionHandler = actionHandler;
     }
 
     public static boolean isLightEvent(Event event) {
@@ -23,7 +24,7 @@ public class LightEventProcessor implements EventProcessor {
 
     public void processEvent(Event event) {
         if (isLightEvent(event)) {
-            smartHome.apply(new LightAction(event.getObjectId(),event.getType() == LIGHT_ON));
+            actionHandler.apply(new LightAction(event.getObjectId(),event.getType() == LIGHT_ON));
         }
     }
 }

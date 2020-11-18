@@ -13,12 +13,8 @@ import java.util.List;
 
 public class EventDecorator implements EventHandler {
     private List<EventProcessor> processors;
-    private SmartHome smartHome;
-    private AlarmSystem alarm;
 
-    public EventDecorator(SmartHome smartHome, AlarmSystem alarm, List<EventProcessor> eventProcessors) {
-        this.smartHome = smartHome;
-        this.alarm = alarm;
+    public EventDecorator(List<EventProcessor> eventProcessors) {
         this.processors = eventProcessors;
     }
 
@@ -32,11 +28,6 @@ public class EventDecorator implements EventHandler {
     }
 
     public void processEvent(Event event) {
-        if (alarm.isDeactivated() || AlarmProcessor.isAlarmEvent(event.getType())) {
-            processors.forEach(p -> p.processEvent(event));
-        } else {
-            Action warnAlarmAction = new AlarmAction(AlarmAction.AlarmState.WARN, null);
-            smartHome.apply(warnAlarmAction);
-        }
+        processors.forEach(p -> p.processEvent(event));
     }
 }

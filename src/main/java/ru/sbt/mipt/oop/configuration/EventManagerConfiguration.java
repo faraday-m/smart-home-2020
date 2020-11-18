@@ -4,6 +4,8 @@ import com.coolcompany.smarthome.events.SensorEventsManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.sbt.mipt.oop.actions.ActionDecorator;
+import ru.sbt.mipt.oop.actions.ActionHandler;
 import ru.sbt.mipt.oop.commands.Notifier;
 import ru.sbt.mipt.oop.commands.SMSNotifier;
 import ru.sbt.mipt.oop.elements.SmartHome;
@@ -40,7 +42,7 @@ public class EventManagerConfiguration {
     
     @Bean
     public EventDecorator eventDecorator() {
-        return new EventDecorator(smartHome(), alarmSystem(), processors);
+        return new EventDecorator(processors);
     }
 
     @Bean
@@ -54,18 +56,23 @@ public class EventManagerConfiguration {
     }
 
     @Bean
+    public ActionHandler actionHandler() {
+        return new ActionDecorator(smartHome(), alarmSystem());
+    }
+
+    @Bean
     public EventProcessor alarmProcessor() {
-        return new AlarmProcessor(smartHome());
+        return new AlarmProcessor(actionHandler());
     }
     
     @Bean
     public EventProcessor doorEventProcessor() {
-        return new DoorEventProcessor(smartHome());
+        return new DoorEventProcessor(actionHandler());
     }
     
     @Bean
     public EventProcessor lightEventProcessor() {
-        return new LightEventProcessor(smartHome());
+        return new LightEventProcessor(actionHandler());
     }
 
     

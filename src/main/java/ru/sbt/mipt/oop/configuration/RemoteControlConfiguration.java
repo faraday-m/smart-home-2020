@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import rc.RemoteControl;
 import rc.RemoteControlRegistry;
+import ru.sbt.mipt.oop.actions.ActionHandler;
 import ru.sbt.mipt.oop.elements.SmartHome;
 import ru.sbt.mipt.oop.remotecontrol.RemoteControlBuilder;
 import ru.sbt.mipt.oop.remotecontrol.command.*;
@@ -14,7 +15,7 @@ import ru.sbt.mipt.oop.remotecontrol.command.*;
 @Import({EventManagerConfiguration.class})
 public class RemoteControlConfiguration {
   @Autowired
-  private SmartHome smartHome;
+  private ActionHandler actionHandler;
 
   @Bean
   public RemoteControlRegistry getRemoteControlRegistry() {
@@ -23,32 +24,32 @@ public class RemoteControlConfiguration {
 
   @Bean
   public RemoteControlCommand getActivateAlarm() {
-    return new ActivateAlarmCommand(smartHome, "activationCode");
+    return new ActivateAlarmCommand(actionHandler, "activationCode");
   }
 
   @Bean
   public RemoteControlCommand getCloseHallDoor() {
-    return new CloseHallDoorCommand(smartHome);
+    return new CloseHallDoorCommand(actionHandler);
   }
 
   @Bean
   public RemoteControlCommand getHallLightsOn() {
-    return new HallLightsOnCommand(smartHome);
+    return new HallLightsOnCommand(actionHandler);
   }
 
   @Bean
   public RemoteControlCommand getHomeLightsOn() {
-    return new HomeLightCommand(smartHome,true);
+    return new HomeLightCommand(actionHandler,true);
   }
 
   @Bean
   public RemoteControlCommand getHomeLightsOff() {
-    return new HomeLightCommand(smartHome,false);
+    return new HomeLightCommand(actionHandler,false);
   }
 
   @Bean
   public RemoteControlCommand getWarnAlarm() {
-    return new WarnAlarmCommand(smartHome);
+    return new WarnAlarmCommand(actionHandler);
   }
 
   @Bean
