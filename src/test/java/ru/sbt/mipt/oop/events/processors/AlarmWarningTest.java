@@ -2,6 +2,7 @@ package ru.sbt.mipt.oop.events.processors;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.sbt.mipt.oop.commands.SMSNotifier;
 import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
 import static org.junit.Assert.assertTrue;
 import static ru.sbt.mipt.oop.Application.ACTIVATION_CODE_1;
@@ -12,7 +13,7 @@ public class AlarmWarningTest {
 
     @Before
     public void initializeHome() {
-        alarmSystem = new AlarmSystem();
+        alarmSystem = new AlarmSystem(new SMSNotifier());
     }
 
     @Test

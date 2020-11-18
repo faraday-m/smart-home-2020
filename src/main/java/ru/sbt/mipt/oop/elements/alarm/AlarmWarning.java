@@ -23,7 +23,7 @@ public class AlarmWarning implements AlarmBehavior {
 
     @Override
     public void warn() {
-        system.sendSms("Trespassing!");
-        System.out.println("Alarm is already in warning mode");
+        system.sendNotification("Trespassing!");
+        System.out.println("The system is in warning mode.");
     }
 }

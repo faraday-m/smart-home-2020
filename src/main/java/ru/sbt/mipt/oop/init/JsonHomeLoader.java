@@ -17,7 +17,6 @@ public class JsonHomeLoader implements HomeLoader {
     public SmartHome load(InputStream stream)  {
         JsonReader jsonReader = new JsonReader(new InputStreamReader(stream));
         SmartHome home = gson.fromJson(jsonReader, SmartHome.class);
-        home.setAlarmSystem(new AlarmSystem());
         return home;
     }
 

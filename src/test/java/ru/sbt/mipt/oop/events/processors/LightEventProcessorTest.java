@@ -2,7 +2,9 @@ package ru.sbt.mipt.oop.events.processors;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.sbt.mipt.oop.commands.SMSNotifier;
 import ru.sbt.mipt.oop.elements.*;
+import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
 import ru.sbt.mipt.oop.events.Event;
 import ru.sbt.mipt.oop.events.LightEvent;
 
@@ -25,7 +27,7 @@ public class LightEventProcessorTest {
         testLights.put(new StringId("1"), new Light("1", false));
         testLights.put(new StringId("2"), new Light("2", true));
         Room room1 = new Room(testLights, new LinkedHashMap<>(), "kitchen");
-        smartHome = new SmartHome(Collections.singletonList(room1));
+        smartHome = new SmartHome(Collections.singletonList(room1), new AlarmSystem(new SMSNotifier()));
         processor = new LightEventProcessor(smartHome);
     }
 

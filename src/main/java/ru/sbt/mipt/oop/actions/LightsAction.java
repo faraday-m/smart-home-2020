@@ -15,8 +15,10 @@ public class LightsAction implements Action {
 
     @Override
     public void accept(HomeComponent component) {
-        ((Light) component).setOn(isOn);
-        SensorCommand command = new SimpleSensorCommand(CommandType.LIGHT_OFF, component.getId());
-        command.sendCommand();
+        if (component instanceof Light) {
+            ((Light) component).setOn(isOn);
+            SensorCommand command = new SimpleSensorCommand(CommandType.LIGHT_OFF, component.getId());
+            command.sendCommand();
+        }
     }
 }

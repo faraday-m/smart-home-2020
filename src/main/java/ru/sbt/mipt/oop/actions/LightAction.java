@@ -19,6 +19,8 @@ public class LightAction implements Action {
 
     @Override
     public void accept(HomeComponent component) {
-        ((Light) component).setOn(isOn);
+        if (component instanceof Light) {
+            ((Light) component).setOn(isOn);
+        }
     }
 }

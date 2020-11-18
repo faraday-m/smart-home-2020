@@ -28,15 +28,15 @@ public class SensorEventGenerator implements EventGenerator {
         EventType sensorEventType;
         String objectId;
 
-        if (random < 0.025) {
+        if (random < 0.04) {
             sensorEventType = EventType.ALARM_ACTIVATE;
             objectId = "ALARM";
             return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_1);
-        } else if (random < 0.05) {
+        } else if (random < 0.06) {
             sensorEventType = EventType.ALARM_DEACTIVATE;
             objectId = "ALARM";
             return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_1);
-        } else if (random < 0.075) {
+        } else if (random < 0.08) {
             sensorEventType = EventType.ALARM_ACTIVATE;
             objectId = "ALARM";
             return new AlarmEvent(sensorEventType, new StringId(objectId), Application.ACTIVATION_CODE_2);

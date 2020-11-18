@@ -16,10 +16,18 @@ public class AlarmAction implements Action {
 
     @Override
     public void accept(HomeComponent component) {
-        switch (state) {
-            case WARN: ((AlarmSystem) component).warn();
-            case ACTIVATE: ((AlarmSystem) component).activate(activationCode);
-            case DEACTIVATE: ((AlarmSystem) component).deactivate(activationCode);
+        if (component instanceof AlarmSystem) {
+            switch (state) {
+                case WARN:
+                    ((AlarmSystem) component).warn();
+                    break;
+                case ACTIVATE:
+                    ((AlarmSystem) component).activate(activationCode);
+                    break;
+                case DEACTIVATE:
+                    ((AlarmSystem) component).deactivate(activationCode);
+                    break;
+            }
         }
     }
 }

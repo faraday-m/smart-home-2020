@@ -19,6 +19,7 @@ public class SmartHome implements HomeComponent {
     public SmartHome(Collection<Room> rooms) {
         this.rooms = rooms;
     }
+
     public SmartHome(Collection<Room> rooms, AlarmSystem alarmSystem) {
         this.rooms = rooms;
         this.alarmSystem = alarmSystem;
@@ -38,11 +39,7 @@ public class SmartHome implements HomeComponent {
     }
 
     public void apply(Action action) {
-        if (action instanceof AlarmAction || action instanceof GetAlarmAction) {
-            alarmSystem.apply(action);
-        } else {
-            rooms.forEach((Room r) -> r.apply(action));
-        }
+        alarmSystem.apply(action);
+        rooms.forEach((Room r) -> r.apply(action));
     }
-
 }

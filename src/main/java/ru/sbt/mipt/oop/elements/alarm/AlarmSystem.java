@@ -1,12 +1,14 @@
 package ru.sbt.mipt.oop.elements.alarm;
 
 import ru.sbt.mipt.oop.actions.Action;
+import ru.sbt.mipt.oop.commands.Notifier;
 import ru.sbt.mipt.oop.elements.*;
 
 public class AlarmSystem implements HomeComponent {
     private final ComponentId id;
     private int activationHashCode;
     private AlarmBehavior behavior;
+    private Notifier notifier;
 
     void setAlarmBehavior(AlarmBehavior behavior) {
             this.behavior = behavior;
@@ -20,9 +22,14 @@ public class AlarmSystem implements HomeComponent {
         this.activationHashCode = activationCode.hashCode();
     }
 
-    public AlarmSystem() {
+    public AlarmSystem(Notifier notifier) {
         this.id = new StringId("ALARM");
+        this.notifier = notifier;
         setAlarmBehavior(new AlarmDeactivated(this));
+    }
+
+    public void sendNotification(String message) {
+        notifier.sendNotification(message);
     }
 
     public void activate(Object activationCode) {
@@ -55,15 +62,12 @@ public class AlarmSystem implements HomeComponent {
     public boolean isActivated() {
         return (behavior instanceof AlarmActivated);
     }
+
     public boolean isDeactivated() {
         return (behavior instanceof AlarmDeactivated);
     }
 
     public boolean isWarned() {
         return (behavior instanceof AlarmWarning);
-    }
-
-    public void sendSms(String sms) {
-        System.out.println(String.format("Sending sms: %s", sms));
     }
 }

@@ -3,6 +3,7 @@ package ru.sbt.mipt.oop.actions;
 import ru.sbt.mipt.oop.elements.ComponentId;
 import ru.sbt.mipt.oop.elements.Door;
 import ru.sbt.mipt.oop.elements.HomeComponent;
+import ru.sbt.mipt.oop.elements.Light;
 
 public class DoorAction implements Action {
     private boolean isOpen;
@@ -19,6 +20,8 @@ public class DoorAction implements Action {
 
     @Override
     public void accept(HomeComponent component) {
-        ((Door) component).setOpen(isOpen);
+        if (component instanceof Door) {
+            ((Door) component).setOpen(isOpen);
+        }
     }
 }
