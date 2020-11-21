@@ -6,15 +6,15 @@ import ru.sbt.mipt.oop.events.Event;
 import ru.sbt.mipt.oop.events.SensorEventAdapter;
 
 public class EventHandlerAdapter implements EventHandler {
-    private EventDecorator eventDecorator;
+    private EventProcessor eventProcessor;
 
-    public EventHandlerAdapter(EventDecorator eventDecorator) {
-        this.eventDecorator = eventDecorator;
+    public EventHandlerAdapter(AlarmNotifierDecorator alarmNotifierDecorator) {
+        this.eventProcessor = alarmNotifierDecorator;
     }
 
     @Override
     public void handleEvent(CCSensorEvent event) {
         Event eventAdapter = new SensorEventAdapter(event);
-        eventDecorator.processEvent(eventAdapter);
+        eventProcessor.processEvent(eventAdapter);
     }
 }

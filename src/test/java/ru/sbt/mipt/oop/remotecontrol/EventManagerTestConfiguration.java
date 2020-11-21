@@ -5,7 +5,7 @@ import com.coolcompany.smarthome.events.SensorEventsManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.sbt.mipt.oop.actions.ActionDecorator;
+import ru.sbt.mipt.oop.actions.CompositeActionHandler;
 import ru.sbt.mipt.oop.actions.ActionHandler;
 import ru.sbt.mipt.oop.commands.Notifier;
 import ru.sbt.mipt.oop.commands.SMSNotifier;
@@ -21,7 +21,7 @@ import java.util.Map;
 @Configuration
 public class EventManagerTestConfiguration {
     @Autowired
-    List<EventProcessor> processors;
+    List<HomeEventProcessor> processors;
 
     @Bean
     public SensorEventsManager eventManager() {
@@ -36,8 +36,8 @@ public class EventManagerTestConfiguration {
     }
     
     @Bean
-    public EventDecorator eventDecorator() {
-        return new EventDecorator(processors);
+    public AlarmNotifierDecorator eventDecorator() {
+        return new AlarmNotifierDecorator(processors, alarmSystem(), actionHandler());
     }
 
     @Bean(name="kitchenLights")
@@ -82,21 +82,21 @@ public class EventManagerTestConfiguration {
 
     @Bean
     public ActionHandler actionHandler() {
-        return new ActionDecorator(smartHome(), alarmSystem());
+        return new CompositeActionHandler(smartHome(), alarmSystem());
     }
     
     @Bean
-    public EventProcessor alarmProcessor() {
+    public HomeEventProcessor alarmProcessor() {
         return new AlarmProcessor(actionHandler());
     }
     
     @Bean
-    public EventProcessor doorEventProcessor() {
+    public HomeEventProcessor doorEventProcessor() {
         return new DoorEventProcessor(actionHandler());
     }
     
     @Bean
-    public EventProcessor lightEventProcessor() {
+    public HomeEventProcessor lightEventProcessor() {
         return new LightEventProcessor(actionHandler());
     }
 }

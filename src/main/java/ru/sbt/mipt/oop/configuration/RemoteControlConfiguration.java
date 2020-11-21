@@ -55,15 +55,20 @@ public class RemoteControlConfiguration {
   }
 
   @Bean
+  public Map<String, RemoteControlCommand> commands() {
+      Map<String, RemoteControlCommand> commands = new LinkedHashMap<>();
+      commands.put("A", activateAlarm());
+      commands.put("B", warnAlarm());
+      commands.put("C", closeHallDoor());
+      commands.put("D", hallLightsOn());
+      commands.put("0", homeLightsOff());
+      commands.put("1", homeLightsOn());
+      return commands;
+  }
+
+  @Bean
   public RemoteControl remoteControl() {
-     Map<String, RemoteControlCommand> commands = new LinkedHashMap<>();
-     commands.put("A", activateAlarm());
-     commands.put("B", warnAlarm());
-     commands.put("C", closeHallDoor());
-     commands.put("D", hallLightsOn());
-     commands.put("0", homeLightsOff());
-     commands.put("1", homeLightsOn());
-     RemoteControl rc = new RemoteControlImpl("rc", commands);
+     RemoteControl rc = new RemoteControlImpl("rc", commands());
      remoteControlRegistry().registerRemoteControl(rc, "rc");
      return rc;
   }

@@ -1,19 +1,15 @@
 package ru.sbt.mipt.oop.events.processors;
 
 import ru.sbt.mipt.oop.actions.Action;
-import ru.sbt.mipt.oop.actions.ActionDecorator;
 import ru.sbt.mipt.oop.actions.ActionHandler;
 import ru.sbt.mipt.oop.actions.AlarmAction;
-import ru.sbt.mipt.oop.elements.SmartHome;
 import ru.sbt.mipt.oop.events.AlarmEvent;
 import ru.sbt.mipt.oop.events.Event;
 import ru.sbt.mipt.oop.events.typedefs.EventType;
 
 import static ru.sbt.mipt.oop.events.typedefs.EventType.*;
 
-public class AlarmProcessor implements EventProcessor {
-    private ActionHandler actionHandler;
-
+public class AlarmProcessor extends HomeEventProcessor {
     public AlarmProcessor(ActionHandler actionHandler) {
         this.actionHandler = actionHandler;
     }

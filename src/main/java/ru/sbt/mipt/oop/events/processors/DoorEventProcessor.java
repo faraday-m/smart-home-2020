@@ -7,8 +7,7 @@ import ru.sbt.mipt.oop.events.Event;
 import static ru.sbt.mipt.oop.events.typedefs.EventType.DOOR_CLOSED;
 import static ru.sbt.mipt.oop.events.typedefs.EventType.DOOR_OPEN;
 
-public class DoorEventProcessor implements EventProcessor {
-    private ActionHandler actionHandler;
+public class DoorEventProcessor extends HomeEventProcessor {
 
     public DoorEventProcessor(ActionHandler actionHandler) {
         this.actionHandler = actionHandler;
