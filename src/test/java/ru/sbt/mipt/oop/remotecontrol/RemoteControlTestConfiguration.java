@@ -9,6 +9,7 @@ import rc.RemoteControlRegistry;
 import ru.sbt.mipt.oop.actions.ActionHandler;
 import ru.sbt.mipt.oop.configuration.EventManagerConfiguration;
 import ru.sbt.mipt.oop.elements.SmartHome;
+import ru.sbt.mipt.oop.events.typedefs.EventType;
 import ru.sbt.mipt.oop.remotecontrol.command.*;
 
 import java.util.LinkedHashMap;

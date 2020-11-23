@@ -3,6 +3,7 @@ package ru.sbt.mipt.oop.events.processors;
 import ru.sbt.mipt.oop.actions.Action;
 import ru.sbt.mipt.oop.actions.ActionHandler;
 import ru.sbt.mipt.oop.actions.AlarmAction;
+import ru.sbt.mipt.oop.events.ActivationCodeOwner;
 import ru.sbt.mipt.oop.events.AlarmEvent;
 import ru.sbt.mipt.oop.events.Event;
 import ru.sbt.mipt.oop.events.typedefs.EventType;
@@ -14,16 +15,16 @@ public class AlarmProcessor extends HomeEventProcessor {
         this.actionHandler = actionHandler;
     }
 
-    public static boolean isAlarmEvent(EventType type) {
+    public boolean isAlarmEvent(EventType type) {
         return (type.equals(ALARM_ACTIVATE) || type.equals(ALARM_DEACTIVATE) || type.equals(ALARM_WARNING) || type.equals(GET_ALARM_STATE));
     }
 
     private Action getAlarmAction(Event event) {
         switch(event.getType()) {
             case ALARM_ACTIVATE:
-                return new AlarmAction(AlarmAction.AlarmState.ACTIVATE, ((AlarmEvent) event).getActivationCode());
+                return new AlarmAction(AlarmAction.AlarmState.ACTIVATE, ((ActivationCodeOwner) event).getActivationCode());
             case ALARM_DEACTIVATE:
-                return new AlarmAction(AlarmAction.AlarmState.DEACTIVATE, ((AlarmEvent) event).getActivationCode());
+                return new AlarmAction(AlarmAction.AlarmState.DEACTIVATE, ((ActivationCodeOwner) event).getActivationCode());
             case ALARM_WARNING:
                 return new AlarmAction(AlarmAction.AlarmState.WARN, null);
         }

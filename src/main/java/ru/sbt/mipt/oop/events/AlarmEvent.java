@@ -3,7 +3,7 @@ package ru.sbt.mipt.oop.events;
 import ru.sbt.mipt.oop.elements.ComponentId;
 import ru.sbt.mipt.oop.events.typedefs.EventType;
 
-public class AlarmEvent implements Event {
+public class AlarmEvent implements Event, ActivationCodeOwner {
     private final EventType type;
     private final ComponentId objectId;
     private final String activationCode;

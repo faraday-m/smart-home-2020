@@ -9,23 +9,25 @@ import ru.sbt.mipt.oop.events.*;
 
 import java.util.List;
 
-public class AlarmNotifierDecorator implements EventProcessor{
+public class AlarmNotifierDecorator implements EventProcessor {
     private List<? extends EventProcessor> processors;
     private AlarmSystem alarmSystem;
-    private ActionHandler actionHandler;
 
-    public AlarmNotifierDecorator(List<? extends EventProcessor> eventProcessors, AlarmSystem alarmSystem, ActionHandler actionHandler) {
+    public AlarmNotifierDecorator(List<? extends EventProcessor> eventProcessors, AlarmSystem alarmSystem) {
         this.processors = eventProcessors;
         this.alarmSystem = alarmSystem;
-        this.actionHandler = actionHandler;
     }
 
     public void processEvent(Event event) {
-        if (alarmSystem.isDeactivated() || event instanceof AlarmEvent) {
+        if (alarmSystem.isDeactivated()) {
             processors.forEach(p -> p.processEvent(event));
         } else {
-            Action warnAlarmAction = new AlarmAction(AlarmAction.AlarmState.WARN, null);
-            actionHandler.apply(warnAlarmAction);
+            alarmSystem.warn();
+            for (EventProcessor processor : processors) {
+                if (processor instanceof AlarmProcessor) {
+                    processor.processEvent(event);
+                }
+            }
         }
     }
 }

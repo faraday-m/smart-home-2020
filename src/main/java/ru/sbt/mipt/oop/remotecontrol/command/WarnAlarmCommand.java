@@ -4,9 +4,11 @@ import ru.sbt.mipt.oop.actions.ActionHandler;
 import ru.sbt.mipt.oop.actions.AlarmAction;
 import ru.sbt.mipt.oop.elements.SmartHome;
 
-public class WarnAlarmCommand extends AbstractRemoteControlCommand {
+public class WarnAlarmCommand implements RemoteControlCommand {
+  private ActionHandler actionHandler;
+
   public WarnAlarmCommand(ActionHandler actionHandler) {
-    super(actionHandler);
+    this.actionHandler = actionHandler;
   }
 
   @Override

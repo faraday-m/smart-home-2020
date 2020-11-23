@@ -5,13 +5,16 @@ import com.coolcompany.smarthome.events.SensorEventsManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import ru.sbt.mipt.oop.actions.CompositeActionHandler;
 import ru.sbt.mipt.oop.actions.ActionHandler;
 import ru.sbt.mipt.oop.commands.Notifier;
 import ru.sbt.mipt.oop.commands.SMSNotifier;
+import ru.sbt.mipt.oop.configuration.RemoteControlConfiguration;
 import ru.sbt.mipt.oop.elements.*;
 import ru.sbt.mipt.oop.elements.alarm.AlarmSystem;
 import ru.sbt.mipt.oop.events.processors.*;
+import ru.sbt.mipt.oop.events.typedefs.EventType;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -32,12 +35,12 @@ public class EventManagerTestConfiguration {
 
     @Bean
     public EventHandler eventHandler() {
-        return new EventHandlerAdapter(eventDecorator());
+        return new EventHandlerTransformer(eventDecorator(), eventTypeMap());
     }
     
     @Bean
-    public AlarmNotifierDecorator eventDecorator() {
-        return new AlarmNotifierDecorator(processors, alarmSystem(), actionHandler());
+    public EventProcessor eventDecorator() {
+        return new AlarmNotifierDecorator(processors, alarmSystem());
     }
 
     @Bean(name="kitchenLights")
@@ -78,6 +81,18 @@ public class EventManagerTestConfiguration {
     @Bean
     public Notifier smsNotifier() {
         return new SMSNotifier();
+    }
+
+    @Bean
+    public Map<String, EventType> eventTypeMap() {
+        Map<String, EventType> eventTypeMap = new LinkedHashMap<>();
+        eventTypeMap.put("LightIsOn", EventType.LIGHT_ON);
+        eventTypeMap.put("LightIsOff", EventType.LIGHT_OFF);
+        eventTypeMap.put("DoorIsOpen", EventType.DOOR_OPEN);
+        eventTypeMap.put("DoorIsClosed", EventType.DOOR_CLOSED);
+        eventTypeMap.put("DoorIsLocked", EventType.ALARM_ACTIVATE);
+        eventTypeMap.put("DoorIsUnlocked", EventType.ALARM_DEACTIVATE);
+        return eventTypeMap;
     }
 
     @Bean

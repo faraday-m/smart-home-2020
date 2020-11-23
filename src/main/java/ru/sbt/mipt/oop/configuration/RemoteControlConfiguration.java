@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Import;
 import rc.RemoteControl;
 import rc.RemoteControlRegistry;
 import ru.sbt.mipt.oop.actions.ActionHandler;
+import ru.sbt.mipt.oop.events.typedefs.EventType;
 import ru.sbt.mipt.oop.remotecontrol.RemoteControlImpl;
 import ru.sbt.mipt.oop.remotecontrol.command.*;
 

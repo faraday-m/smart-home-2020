@@ -7,9 +7,11 @@ import ru.sbt.mipt.oop.actions.LightsAction;
 import ru.sbt.mipt.oop.elements.ComponentId;
 import ru.sbt.mipt.oop.elements.SmartHome;
 
-public class CloseHallDoorCommand extends AbstractRemoteControlCommand {
+public class CloseHallDoorCommand implements RemoteControlCommand {
+  private ActionHandler actionHandler;
+
   public CloseHallDoorCommand(ActionHandler actionHandler) {
-    super(actionHandler);
+    this.actionHandler = actionHandler;
   }
 
   @Override

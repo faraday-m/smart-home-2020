@@ -5,9 +5,11 @@ import ru.sbt.mipt.oop.actions.RoomLightsAction;
 import ru.sbt.mipt.oop.elements.SmartHome;
 import ru.sbt.mipt.oop.elements.StringId;
 
-public class HallLightsOnCommand extends AbstractRemoteControlCommand {
+public class HallLightsOnCommand implements RemoteControlCommand {
+  private ActionHandler actionHandler;
+
   public HallLightsOnCommand(ActionHandler actionHandler) {
-    super(actionHandler);
+    this.actionHandler = actionHandler;
   }
 
   @Override

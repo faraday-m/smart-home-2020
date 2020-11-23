@@ -4,11 +4,12 @@ import ru.sbt.mipt.oop.actions.ActionHandler;
 import ru.sbt.mipt.oop.actions.AlarmAction;
 import ru.sbt.mipt.oop.elements.SmartHome;
 
-public class ActivateAlarmCommand extends AbstractRemoteControlCommand {
+public class ActivateAlarmCommand implements RemoteControlCommand {
   private String activationCode;
+  private ActionHandler actionHandler;
   
   public ActivateAlarmCommand(ActionHandler actionHandler, String activationCode) {
-    super(actionHandler);
+    this.actionHandler = actionHandler;
     this.activationCode = activationCode;
   }
   
