@@ -1,13 +1,13 @@
 package ru.sbt.mipt.oop.commands;
 
-import ru.sbt.mipt.oop.elements.DeviceId;
+import ru.sbt.mipt.oop.elements.ComponentId;
 
 public class SimpleSensorCommand implements SensorCommand {
 
     private final CommandType type;
-    private final DeviceId objectId;
+    private final ComponentId objectId;
 
-    public SimpleSensorCommand(CommandType type, DeviceId objectId) {
+    public SimpleSensorCommand(CommandType type, ComponentId objectId) {
         this.type = type;
         this.objectId = objectId;
     }

@@ -1,21 +1,22 @@
 package ru.sbt.mipt.oop.events;
 
-import ru.sbt.mipt.oop.elements.DeviceId;
+import ru.sbt.mipt.oop.elements.ComponentId;
+import ru.sbt.mipt.oop.events.typedefs.EventType;
 
-public class SensorEvent {
-    private final SensorEventType type;
-    private final DeviceId objectId;
+public abstract class SensorEvent implements Event {
+    private final EventType type;
+    private final ComponentId objectId;
 
-    public SensorEvent(SensorEventType type, DeviceId objectId) {
+    public SensorEvent(EventType type, ComponentId objectId) {
         this.type = type;
         this.objectId = objectId;
     }
 
-    public SensorEventType getType() {
+    public EventType getType() {
         return type;
     }
 
-    public DeviceId getObjectId() {
+    public ComponentId getObjectId() {
         return objectId;
     }
 

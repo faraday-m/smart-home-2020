@@ -1,38 +1,16 @@
 package ru.sbt.mipt.oop;
 
-import ru.sbt.mipt.oop.events.*;
-import ru.sbt.mipt.oop.init.HomeLoader;
-import ru.sbt.mipt.oop.init.JsonHomeLoader;
-
-import java.io.FileInputStream;
-import java.io.IOException;
+import com.coolcompany.smarthome.events.SensorEventsManager;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
+import ru.sbt.mipt.oop.configuration.EventManagerConfiguration;
+import ru.sbt.mipt.oop.configuration.RemoteControlConfiguration;
 
 public class Application {
-    private static SmartHome smartHome;
-    private static HomeLoader homeLoader;
-
-    public Application(HomeLoader homeLoader) {
-        this.homeLoader = homeLoader;
+    public static void main(String... args) {
+        AbstractApplicationContext context = new AnnotationConfigApplicationContext(EventManagerConfiguration.class, RemoteControlConfiguration.class);
+        SensorEventsManager eventManager = context.getBean(SensorEventsManager.class);
+        eventManager.start();
     }
-
-    public static void main(String... args) throws IOException {
-        HomeLoader homeLoader = new JsonHomeLoader();
-        Application application = new Application(homeLoader);
-        application.run();
-    }
-
-
-    private void run() {
-        // считываем состояние дома из файла
-        try {
-            SmartHome smartHome = homeLoader.load(new FileInputStream("smart-home-1.js"));
-            Engine engine = new SmartHomeEngine(smartHome, new SensorEventGenerator());
-            engine.start();
-
-        } catch (IOException e) {
-            System.out.println("Error while loading from JSON");
-        }
-    }
-
 
 }

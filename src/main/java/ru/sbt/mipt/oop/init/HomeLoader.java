@@ -1,6 +1,6 @@
 package ru.sbt.mipt.oop.init;
 
-import ru.sbt.mipt.oop.SmartHome;
+import ru.sbt.mipt.oop.elements.SmartHome;
 
 import java.io.InputStream;
 import java.io.OutputStream;
