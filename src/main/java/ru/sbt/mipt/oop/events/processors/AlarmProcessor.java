@@ -10,7 +10,8 @@ import ru.sbt.mipt.oop.events.typedefs.EventType;
 
 import static ru.sbt.mipt.oop.events.typedefs.EventType.*;
 
-public class AlarmProcessor extends HomeEventProcessor {
+public class AlarmProcessor implements EventProcessor {
+    private ActionHandler actionHandler;
     public AlarmProcessor(ActionHandler actionHandler) {
         this.actionHandler = actionHandler;
     }

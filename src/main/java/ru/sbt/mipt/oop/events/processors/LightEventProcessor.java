@@ -11,7 +11,8 @@ import ru.sbt.mipt.oop.events.typedefs.EventType;
 
 import static ru.sbt.mipt.oop.events.typedefs.EventType.*;
 
-public class LightEventProcessor extends HomeEventProcessor {
+public class LightEventProcessor implements EventProcessor {
+    private ActionHandler actionHandler;
     public LightEventProcessor(ActionHandler actionHandler) {
         this.actionHandler = actionHandler;
     }

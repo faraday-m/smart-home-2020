@@ -3,9 +3,8 @@ package ru.sbt.mipt.oop.configuration;
 import com.coolcompany.smarthome.events.EventHandler;
 import com.coolcompany.smarthome.events.SensorEventsManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.*;
 import ru.sbt.mipt.oop.actions.CompositeActionHandler;
 import ru.sbt.mipt.oop.actions.ActionHandler;
 import ru.sbt.mipt.oop.commands.Notifier;
@@ -24,7 +23,8 @@ import java.util.Map;
 @Configuration
 public class EventManagerConfiguration {
     @Autowired
-    List<HomeEventProcessor> processors;
+    @Qualifier("simpleProcessor")
+    List<EventProcessor> processors;
 
     @Bean
     public SensorEventsManager eventManager() {
@@ -46,6 +46,7 @@ public class EventManagerConfiguration {
     }
     
     @Bean
+    @Primary
     public EventProcessor eventDecorator() {
         return new AlarmNotifierDecorator(processors, alarmSystem());
     }
@@ -83,17 +84,20 @@ public class EventManagerConfiguration {
     }
 
     @Bean
-    public HomeEventProcessor alarmProcessor() {
+    @Qualifier("simpleProcessor")
+    public EventProcessor alarmProcessor() {
         return new AlarmProcessor(actionHandler());
     }
     
     @Bean
-    public HomeEventProcessor doorEventProcessor() {
+    @Qualifier("simpleProcessor")
+    public EventProcessor doorEventProcessor() {
         return new DoorEventProcessor(actionHandler());
     }
     
     @Bean
-    public HomeEventProcessor lightEventProcessor() {
+    @Qualifier("simpleProcessor")
+    public EventProcessor lightEventProcessor() {
         return new LightEventProcessor(actionHandler());
     }
 
